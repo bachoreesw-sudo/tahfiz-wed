@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AI Muslim Women Care</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root{
+  --primary-pink:#FF6B9D;--secondary-pink:#FFB6C1;--light-pink:#FFF0F5;
+  --primary-purple:#9B59B6;--secondary-purple:#E8DAEF;--light-purple:#F5EEF8;
+  --gradient-main:linear-gradient(135deg,#FF6B9D 0%,#9B59B6 100%);
+  --gradient-card:linear-gradient(145deg,#fff 0%,#FFF0F5 100%);
+  --shadow-soft:0 4px 15px rgba(155,89,182,.15);
+  --shadow-glow:0 0 20px rgba(255,107,157,.4);
+  --text-dark:#2D2D2D;--text-light:#666;--white:#fff;
+  --red-blood:#DC143C;--dark-red:#8B0000;--brown:#8B4513;--black:#1A1A1A;--light-pink-blood:#FFB6C1;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Kanit','Prompt',sans-serif;background:linear-gradient(180deg,#FFF0F5 0%,#F5EEF8 50%,#E8DAEF 100%);min-height:100vh;color:var(--text-dark);overflow-x:hidden}
+.hidden{display:none!important}
+.page{min-height:100vh;padding:20px;padding-bottom:100px;max-width:480px;margin:0 auto}
+.header{display:flex;align-items:center;justify-content:space-between;padding:15px 0;margin-bottom:20px}
+.logo-circle{width:45px;height:45px;border-radius:50%;background:var(--gradient-main);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-soft)}
+.logo-circle i{color:#fff;font-size:20px}
+.logout-btn,.back-btn{background:var(--gradient-main);color:#fff;border:none;font-family:inherit;font-weight:500;cursor:pointer;transition:all .3s;box-shadow:var(--shadow-soft)}
+.logout-btn{padding:10px 20px;border-radius:25px}
+.back-btn{width:42px;height:42px;border-radius:50%;font-size:18px;display:inline-flex;align-items:center;justify-content:center}
+.logout-btn:active,.back-btn:active{transform:scale(.95);box-shadow:var(--shadow-glow)}
+.welcome-section{text-align:center;margin-bottom:30px}
+.avatar-container{width:140px;height:140px;margin:0 auto 20px}
+.avatar-circle{width:100%;height:100%;border-radius:50%;background:var(--gradient-main);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(155,89,182,.3);overflow:hidden}
+.avatar-circle i{font-size:64px;color:#fff}
+.welcome-text{font-size:14px;color:var(--primary-purple);margin-bottom:5px;font-weight:500}
+.app-title{font-size:22px;font-weight:700;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px;margin-top:8px}
+.auth-cards{display:flex;flex-direction:column;gap:15px;margin-top:30px}
+.auth-card{background:var(--gradient-card);border-radius:25px;padding:25px;text-align:center;box-shadow:var(--shadow-soft);transition:all .3s;cursor:pointer;border:2px solid transparent}
+.auth-card:active{transform:scale(.97);box-shadow:var(--shadow-glow);border-color:var(--primary-pink)}
+.auth-card i{font-size:40px;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:15px}
+.auth-card h3{font-size:18px;color:var(--text-dark);margin-bottom:5px}
+.auth-card p{font-size:13px;color:var(--text-light)}
+.form-group{margin-bottom:20px}
+.form-group label{display:block;margin-bottom:8px;font-weight:500;color:var(--text-dark)}
+.form-group input{width:100%;padding:15px 20px;border:2px solid var(--secondary-pink);border-radius:15px;font-size:16px;font-family:inherit;background:#fff;transition:all .3s}
+.form-group input:focus{outline:none;border-color:var(--primary-pink);box-shadow:0 0 15px rgba(255,107,157,.2)}
+.submit-btn{width:100%;padding:16px;background:var(--gradient-main);color:#fff;border:none;border-radius:15px;font-size:17px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .3s;box-shadow:var(--shadow-soft);margin-top:8px}
+.submit-btn:active{transform:scale(.98);box-shadow:var(--shadow-glow)}
+.secondary-btn{background:#fff;color:var(--primary-purple);border:2px solid var(--secondary-pink);box-shadow:none}
+.latest-record-card{background:var(--gradient-card);border-radius:25px;padding:25px;text-align:center;margin-bottom:25px;box-shadow:var(--shadow-soft)}
+.latest-record-card h3{font-size:16px;margin-bottom:15px}
+.latest-date{font-size:24px;font-weight:700;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.view-result-btn{background:var(--gradient-main);color:#fff;border:none;padding:12px 25px;border-radius:25px;font-family:inherit;font-weight:500;cursor:pointer}
+.view-result-btn:active{transform:scale(.95);box-shadow:var(--shadow-glow)}
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.menu-card{background:var(--gradient-card);border-radius:20px;padding:25px 15px;text-align:center;box-shadow:var(--shadow-soft);transition:all .3s;cursor:pointer;border:none;font-family:inherit}
+.menu-card:active{transform:scale(.95);box-shadow:var(--shadow-glow)}
+.menu-card i{font-size:35px;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;display:block}
+.menu-card h4{font-size:14px;color:var(--text-dark);font-weight:500}
+.step-indicator{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:25px;flex-wrap:wrap}
+.step{width:12px;height:12px;border-radius:50%;background:var(--secondary-pink);transition:all .3s}
+.step.active{width:35px;border-radius:10px;background:var(--gradient-main)}
+.step-text{font-size:13px;color:var(--text-light);margin-left:8px;width:100%;text-align:center;margin-top:6px}
+.section-title{font-size:17px;font-weight:600;margin-bottom:15px;display:flex;align-items:center;gap:10px}
+.section-title i{color:var(--primary-pink)}
+.blood-color-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:25px}
+.blood-color-btn{flex:1;min-width:80px;padding:15px 10px;border:2px solid var(--secondary-pink);border-radius:15px;background:#fff;cursor:pointer;transition:all .3s;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:inherit}
+.blood-color-btn.selected{border-color:var(--primary-pink);box-shadow:var(--shadow-glow);background:var(--light-pink)}
+.color-circle{width:30px;height:30px;border-radius:50%}
+.color-red{background:var(--red-blood)}.color-dark-red{background:var(--dark-red)}
+.color-brown{background:var(--brown)}.color-black{background:var(--black)}
+.color-light-pink{background:var(--light-pink-blood)}
+.blood-color-btn span{font-size:12px}
+.blood-type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:25px}
+.blood-type-btn{padding:18px 15px;border:2px solid var(--secondary-pink);border-radius:15px;background:#fff;cursor:pointer;transition:all .3s;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:inherit}
+.blood-type-btn.selected{border-color:var(--primary-pink);box-shadow:var(--shadow-glow);background:var(--light-pink)}
+.blood-type-btn i{font-size:26px;color:var(--primary-pink)}
+.blood-type-btn span{font-size:13px}
+.duration-counter{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:30px}
+.counter-btn{width:50px;height:50px;border-radius:50%;border:none;background:var(--gradient-main);color:#fff;font-size:24px;cursor:pointer;box-shadow:var(--shadow-soft)}
+.counter-btn:active{transform:scale(.9);box-shadow:var(--shadow-glow)}
+.counter-value{font-size:48px;font-weight:700;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;min-width:80px;text-align:center}
+.counter-label{font-size:16px;color:var(--text-light);text-align:center;margin-bottom:20px}
+.analysis-card{background:var(--gradient-card);border-radius:25px;padding:25px;margin-bottom:20px;box-shadow:var(--shadow-soft)}
+.advice-card{background:var(--light-purple);border-radius:15px;padding:15px;margin-bottom:15px}
+.advice-card h4{font-size:14px;color:var(--primary-purple);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.advice-card p{font-size:13px;color:var(--text-dark);line-height:1.6}
+.warning-card{background:#FFF3CD;border-left:4px solid #FFC107}
+.warning-card h4{color:#856404}
+.status-card{background:var(--gradient-main);border-radius:25px;padding:25px;color:#fff;margin-bottom:20px;box-shadow:var(--shadow-soft)}
+.status-card h3{font-size:16px;margin-bottom:10px;opacity:.9}
+.status-card p{font-size:14px;line-height:1.6}
+.dropdown-container{margin-bottom:20px}
+.dropdown-container label{display:block;margin-bottom:10px;font-weight:500}
+.dropdown{width:100%;padding:15px 20px;border:2px solid var(--secondary-pink);border-radius:15px;font-size:16px;font-family:inherit;background:#fff;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%239B59B6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6,9 12,15 18,9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 15px center}
+.fatwa-content{background:#fff;border-radius:20px;padding:20px;box-shadow:var(--shadow-soft)}
+.fatwa-content h4{font-size:16px;color:var(--primary-purple);margin-bottom:15px}
+.fatwa-content p{font-size:14px;line-height:1.8}
+.calendar-container{background:#fff;border-radius:25px;padding:20px;box-shadow:var(--shadow-soft);margin-bottom:20px}
+.calendar-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.calendar-nav{background:var(--gradient-main);color:#fff;border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px}
+.calendar-nav:active{transform:scale(.9)}
+.calendar-month{font-size:17px;font-weight:600}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.calendar-day-header{text-align:center;font-size:12px;font-weight:600;color:var(--text-light);padding:8px 0}
+.calendar-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:14px;cursor:pointer;transition:all .3s}
+.calendar-day:active{transform:scale(.9)}
+.calendar-day.period{background:var(--red-blood);color:#fff}
+.calendar-day.predicted{background:var(--secondary-pink)}
+.calendar-day.ovulation{background:#F1C40F}
+.calendar-day.safe{background:#2ECC71;color:#fff}
+.calendar-day.today{border:2px solid var(--primary-purple);font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:15px;margin-top:20px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px}
+.legend-color{width:16px;height:16px;border-radius:50%}
+.knowledge-card{background:var(--gradient-card);border-radius:20px;padding:20px;margin-bottom:15px;box-shadow:var(--shadow-soft);cursor:pointer;transition:all .3s}
+.knowledge-card:active{transform:scale(.98);box-shadow:var(--shadow-glow)}
+.knowledge-card h4{font-size:15px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.knowledge-card h4 i{color:var(--primary-pink)}
+.knowledge-card p{font-size:13px;color:var(--text-light);line-height:1.5}
+.knowledge-content{background:#fff;border-radius:20px;padding:20px;margin-top:15px;display:none}
+.knowledge-content.show{display:block}
+.knowledge-content h5{color:var(--primary-purple);margin-bottom:10px}
+.knowledge-content p,.knowledge-content li{font-size:14px;line-height:1.8;margin-bottom:8px}
+.knowledge-content ul{padding-left:20px}
+.no-record{text-align:center;padding:20px;color:var(--text-light)}
+.no-record i{font-size:40px;color:var(--secondary-pink);margin-bottom:10px;display:block}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--gradient-main);color:#fff;padding:14px 24px;border-radius:30px;box-shadow:var(--shadow-soft);z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+.gauge-wrap{text-align:center;margin:20px 0}
+.gauge-value{font-size:48px;font-weight:700;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.gauge-label{color:var(--text-light);font-size:14px;margin-top:6px}
+.bar{height:14px;border-radius:10px;background:var(--secondary-pink);overflow:hidden;margin-top:10px}
+.bar>div{height:100%;background:var(--gradient-main);width:0;transition:width 1s}
+
+/* Top floating controls */
+.top-controls{position:fixed;top:12px;right:12px;display:flex;gap:8px;z-index:999}
+.top-controls button{width:40px;height:40px;border-radius:50%;border:none;background:var(--gradient-main);color:#fff;cursor:pointer;box-shadow:var(--shadow-soft);font-size:15px}
+.top-controls button.active{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--primary-pink)}
+.comfort-banner{background:linear-gradient(135deg,#FFE0EC,#E8DAEF);border-left:4px solid var(--primary-purple);padding:14px 16px;border-radius:14px;margin-bottom:18px;font-size:14px;line-height:1.6;color:var(--text-dark)}
+.comfort-banner b{color:var(--primary-purple)}
+
+/* Dark mode */
+body.dark{background:linear-gradient(180deg,#1a1230 0%,#251a3d 50%,#1a1230 100%);color:#f0e6ff}
+body.dark{--text-dark:#f0e6ff;--text-light:#bfa9d6;--white:#2a1f44;--light-pink:#3a2456;--secondary-pink:#5a3a7a;--light-purple:#3a2456;--secondary-purple:#5a3a7a;--gradient-card:linear-gradient(145deg,#2d1f4a 0%,#3a2456 100%);--shadow-soft:0 4px 15px rgba(0,0,0,.4)}
+body.dark .form-group input,body.dark .dropdown,body.dark .fatwa-content,body.dark .calendar-container,body.dark .knowledge-content{background:#2d1f4a;color:#f0e6ff}
+body.dark .auth-card h3,body.dark .menu-card h4,body.dark .knowledge-card h4{color:#f0e6ff}
+body.dark .advice-card{background:#3a2456}
+body.dark .advice-card p,body.dark .advice-card h4{color:#f0e6ff}
+body.dark .warning-card{background:#4a3a1a;border-left-color:#FFC107}
+body.dark .warning-card h4{color:#FFD966}
+body.dark .calendar-day{color:#f0e6ff}
+body.dark .comfort-banner{background:linear-gradient(135deg,#3a2456,#2d1f4a);color:#f0e6ff}
+
+/* Private mode */
+body.private .latest-record-card,body.private #latest-info,body.private .calendar-day.period,body.private .calendar-day.predicted{filter:blur(10px);transition:filter .3s}
+body.private .latest-record-card:hover,body.private .latest-record-card:active{filter:none}
+body.private::before{content:"🔒 โหมดส่วนตัวเปิดอยู่ — ข้อมูลถูกซ่อน";position:fixed;top:60px;left:50%;transform:translateX(-50%);background:var(--primary-purple);color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;z-index:998}
+</style>
+</head>
+<body>
+
+<!-- Floating top controls (visible everywhere) -->
+<div class="top-controls">
+  <button id="btn-dark" title="โหมดมืด"><i class="fa-solid fa-moon"></i></button>
+  <button id="btn-private" title="โหมดส่วนตัว"><i class="fa-solid fa-eye-slash"></i></button>
+</div>
+
+
+
+<!-- Welcome / Auth select -->
+<div id="page-welcome" class="page">
+  <div class="welcome-section">
+    <div class="avatar-container"><div class="avatar-circle"><i class="fa-solid fa-mosque"></i></div></div>
+    <p class="welcome-text">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
+    <p class="welcome-text">ยินดีต้อนรับเข้าสู่เว็บไซต์</p>
+    <h1 class="app-title">✨ AI Muslim Women Care ✨</h1>
+  </div>
+  <div class="auth-cards">
+    <div class="auth-card" data-go="login"><i class="fa-solid fa-right-to-bracket"></i><h3>เข้าสู่ระบบ</h3><p>สำหรับผู้ที่มีบัญชีแล้ว</p></div>
+    <div class="auth-card" data-go="register"><i class="fa-solid fa-user-plus"></i><h3>สร้างบัญชี</h3><p>ลงทะเบียนผู้ใช้ใหม่</p></div>
+  </div>
+</div>
+
+<!-- Register -->
+<div id="page-register" class="page hidden">
+  <div class="header"><button class="back-btn" data-go="welcome"><i class="fa-solid fa-arrow-left"></i></button></div>
+  <div class="welcome-section"><h1 class="app-title">สร้างบัญชีใหม่</h1></div>
+  <form id="form-register">
+    <div class="form-group"><label>ชื่อผู้ใช้</label><input type="text" id="reg-name" required></div>
+    <div class="form-group"><label>อายุ</label><input type="number" id="reg-age" min="9" max="80" required></div>
+    <div class="form-group"><label>รหัสผ่าน</label><input type="password" id="reg-pass" minlength="6" required></div>
+    <button type="submit" class="submit-btn">บันทึกข้อมูล</button>
+  </form>
+</div>
+
+<!-- Login -->
+<div id="page-login" class="page hidden">
+  <div class="header"><button class="back-btn" data-go="welcome"><i class="fa-solid fa-arrow-left"></i></button></div>
+  <div class="welcome-section"><h1 class="app-title">เข้าสู่ระบบ</h1></div>
+  <form id="form-login">
+    <div class="form-group"><label>ชื่อผู้ใช้</label><input type="text" id="login-name" required></div>
+    <div class="form-group"><label>รหัสผ่าน</label><input type="password" id="login-pass" required></div>
+    <button type="submit" class="submit-btn">เข้าสู่ระบบ</button>
+  </form>
+</div>
+
+<!-- Home -->
+<div id="page-home" class="page hidden">
+  <div class="header">
+    <div class="logo-circle"><i class="fa-solid fa-heart"></i></div>
+    <button class="logout-btn" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ</button>
+  </div>
+  <div class="welcome-section">
+    <div class="avatar-container"><div class="avatar-circle"><i class="fa-solid fa-mosque"></i></div></div>
+    <p class="welcome-text">Assalamu'alaikum</p>
+    <h1 class="app-title">✨ AI Muslim Women Care ✨</h1>
+  </div>
+
+
+  <div id="comfort-banner" class="comfort-banner hidden"></div>
+
+  <div class="latest-record-card">
+    <h3><i class="fa-solid fa-clock-rotate-left"></i> บันทึกประจำเดือนล่าสุด</h3>
+    <div id="latest-info"><p class="no-record"><i class="fa-regular fa-folder-open"></i><br>ยังไม่มีข้อมูล</p></div>
+    <button class="view-result-btn" id="btn-view-latest" style="display:none">ดูผลลัพธ์ที่บันทึกล่าสุด</button>
+  </div>
+
+  <div class="menu-grid">
+    <button class="menu-card" data-go="record1"><i class="fa-solid fa-droplet"></i><h4>บันทึกอาการ</h4></button>
+    <button class="menu-card" data-go="calendar"><i class="fa-solid fa-calendar-days"></i><h4>ปฏิทินรอบเดือน</h4></button>
+    <button class="menu-card" data-go="ibadah"><i class="fa-solid fa-hands-praying"></i><h4>Ibadah Mode</h4></button>
+    <button class="menu-card" data-go="knowledge"><i class="fa-solid fa-book-quran"></i><h4>ความรู้เรื่องประจำเดือน</h4></button>
+    <button class="menu-card" id="btn-azkar"><i class="fa-solid fa-book-bookmark"></i><h4>อัซกัร (PDF)</h4></button>
+    <button class="menu-card" id="btn-comfort"><i class="fa-solid fa-heart-circle-check"></i><h4>กำลังใจวันนี้</h4></button>
+  </div>
+
+</div>
+
+<!-- Record Step 1 -->
+<div id="page-record1" class="page hidden">
+  <div class="header"><button class="back-btn" data-go="home"><i class="fa-solid fa-arrow-left"></i></button><h2 style="font-size:18px">บันทึกอาการ</h2><div></div></div>
+  <div class="step-indicator"><div class="step active"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step-text">ขั้นตอนที่ 1 จาก 4</div></div>
+
+  <h3 class="section-title"><i class="fa-solid fa-droplet"></i> สีของเลือด</h3>
+  <div class="blood-color-grid" id="color-grid">
+    <button type="button" class="blood-color-btn" data-color="แดงสด"><div class="color-circle color-red"></div><span>แดงสด</span></button>
+    <button type="button" class="blood-color-btn" data-color="แดงเข้ม"><div class="color-circle color-dark-red"></div><span>แดงเข้ม</span></button>
+    <button type="button" class="blood-color-btn" data-color="น้ำตาล"><div class="color-circle color-brown"></div><span>น้ำตาล</span></button>
+    <button type="button" class="blood-color-btn" data-color="ดำ"><div class="color-circle color-black"></div><span>ดำ</span></button>
+    <button type="button" class="blood-color-btn" data-color="ชมพูจาง"><div class="color-circle color-light-pink"></div><span>ชมพูจาง</span></button>
+  </div>
+
+  <h3 class="section-title"><i class="fa-solid fa-flask"></i> ลักษณะของเลือด</h3>
+  <div class="blood-type-grid" id="type-grid">
+    <button type="button" class="blood-type-btn" data-type="เหลว"><i class="fa-solid fa-water"></i><span>เหลว</span></button>
+    <button type="button" class="blood-type-btn" data-type="ข้น"><i class="fa-solid fa-fill-drip"></i><span>ข้น</span></button>
+    <button type="button" class="blood-type-btn" data-type="มีลิ่มเลือด"><i class="fa-solid fa-circle-dot"></i><span>มีลิ่มเลือด</span></button>
+    <button type="button" class="blood-type-btn" data-type="อื่นๆ"><i class="fa-solid fa-ellipsis"></i><span>อื่นๆ</span></button>
+  </div>
+
+  <h3 class="section-title"><i class="fa-solid fa-calendar-day"></i> ระยะเวลา (วัน)</h3>
+  <div class="duration-counter">
+    <button type="button" class="counter-btn" id="dur-minus">−</button>
+    <div><div class="counter-value" id="dur-val">1</div></div>
+    <button type="button" class="counter-btn" id="dur-plus">+</button>
+  </div>
+  <div class="counter-label">วัน</div>
+
+  <button class="submit-btn" id="btn-to-step2">ถัดไป <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<!-- Record Step 2 - Analysis -->
+<div id="page-record2" class="page hidden">
+  <div class="header"><button class="back-btn" data-go="record1"><i class="fa-solid fa-arrow-left"></i></button><h2 style="font-size:18px">ผลการวิเคราะห์</h2><div></div></div>
+  <div class="step-indicator"><div class="step"></div><div class="step active"></div><div class="step"></div><div class="step"></div><div class="step-text">ขั้นตอนที่ 2 จาก 4</div></div>
+
+  <div class="analysis-card">
+    <h3 style="text-align:center;margin-bottom:10px" id="analysis-title">มีแนวโน้มเป็นประจำเดือน</h3>
+    <p style="text-align:center;color:var(--text-light);font-size:13px">ความมั่นใจในการวิเคราะห์</p>
+    <div class="gauge-wrap">
+      <div class="gauge-value" id="confidence">0%</div>
+      <div class="bar"><div id="bar-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="advice-card">
+    <h4><i class="fa-solid fa-lightbulb"></i> คำแนะนำ</h4>
+    <p id="advice-text">กำลังวิเคราะห์...</p>
+  </div>
+
+  <div class="advice-card warning-card">
+    <h4><i class="fa-solid fa-triangle-exclamation"></i> หมายเหตุ</h4>
+    <p>นี่เป็นการวินิจฉัยเบื้องต้นเท่านั้น หากมีอาการผิดปกติหรือไม่แน่ใจ ควรปรึกษาแพทย์ผู้เชี่ยวชาญ</p>
+  </div>
+
+  <button class="submit-btn" id="btn-to-step3">บันทึกและดูผลลัพธ์ <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<!-- Record Step 3 - Diagnosis -->
+<div id="page-record3" class="page hidden">
+  <div class="header"><button class="back-btn" data-go="record2"><i class="fa-solid fa-arrow-left"></i></button><h2 style="font-size:18px">ผลการวินิจฉัย</h2><div></div></div>
+  <div class="step-indicator"><div class="step"></div><div class="step"></div><div class="step active"></div><div class="step"></div><div class="step-text">ขั้นตอนที่ 3 จาก 4</div></div>
+
+  <div class="status-card">
+    <h3><i class="fa-solid fa-clipboard-check"></i> สรุปผล</h3>
+    <p id="diag-summary">...</p>
+  </div>
+
+  <div class="advice-card">
+    <h4><i class="fa-solid fa-notes-medical"></i> รายละเอียดการวินิจฉัย</h4>
+    <p id="diag-detail">...</p>
+  </div>
+
+  <div class="advice-card">
+    <h4><i class="fa-solid fa-user-doctor"></i> คำแนะนำทางการแพทย์</h4>
+    <p id="diag-medical">...</p>
+  </div>
+
+  <button class="submit-btn" id="btn-to-step4">ถัดไป: แนวทางการบูชา <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<!-- Record Step 4 - Ibadah guidance -->
+<div id="page-record4" class="page hidden">
+  <div class="header"><button class="back-btn" data-go="record3"><i class="fa-solid fa-arrow-left"></i></button><h2 style="font-size:18px">แนวทางการบูชา</h2><div></div></div>
+  <div class="step-indicator"><div class="step"></div><div class="step"></div><div class="step"></div><div class="step active"></div><div class="step-text">ขั้นตอนที่ 4 จาก 4</div></div>
+
+  <div class="advice-card">
+    <h4><i class="fa-solid fa-hands-praying"></i> ละหมาด</h4>
+    <p id="ibadah-pray">...</p>
+  </div>
+  <div class="advice-card">
+    <h4><i class="fa-solid fa-moon"></i> ถือศีลอด</h4>
+    <p id="ibadah-fast">...</p>
+  </div>
+  <div class="advice-card">
+    <h4><i class="fa-solid fa-book-quran"></i> อ่านอัลกุรอาน</h4>
+    <p id="ibadah-quran">...</p>
+  </div>
+
+  <button class="submit-btn" data-go="home"><i class="fa-solid fa-house"></i> เสร็จสิ้น (กลับหน้าหลัก)</button>
+</div>
+
+<!-- Calendar -->
+<div id="page-calendar" class="page hidden">
+  <div class="header"><button class="back-btn" data-go="home"><i class="fa-solid fa-arrow-left"></i></button><h2 style="font-size:18px">ปฏิทินรอบเดือน</h2><div></div></div>
+  <div class="calendar-container">
+    <div class="calendar-header">
+      <button class="calendar-nav" id="cal-prev"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="calendar-month" id="cal-month"></div>
+      <button class="calendar-nav" id="cal-next"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    <div class="calendar-grid" id="cal-grid"></div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-color" style="background:var(--red-blood)"></div>ประจำเดือน</div>
+      <div class="legend-item"><div class="legend-color" style="background:var(--secondary-pink)"></div>คาดการณ์</div>
+      <div class="legend-item"><div class="legend-color" style="background:#F1C40F"></div>ตกไข่</div>
+      <div class="legend-item"><div class="legend-color" style="background:#2ECC71"></div>ปลอดภัย</div>
+    </div>
+  </div>
+</div>
+
+<!-- Ibadah Mode -->
+<div id="page-ibadah" class="page hidden">
+  <div class="header"><button class="back-btn" data-go="home"><i class="fa-solid fa-arrow-left"></i></button><h2 style="font-size:18px">Ibadah Mode</h2><div></div></div>
+  <div class="dropdown-container">
+    <label>เลือกหัวข้อ</label>
+    <select class="dropdown" id="ibadah-topic">
+      <option value="pray">การละหมาดในช่วงมีประจำเดือน</option>
+      <option value="fast">การถือศีลอด</option>
+      <option value="quran">การอ่านอัลกุรอาน</option>
+      <option value="hajj">การประกอบพิธีฮัจญ์</option>
+    </select>
+  </div>
+  <div class="fatwa-content" id="ibadah-content"></div>
+</div>
+
+<!-- Knowledge -->
+<div id="page-knowledge" class="page hidden">
+  <div class="header"><button class="back-btn" data-go="home"><i class="fa-solid fa-arrow-left"></i></button><h2 style="font-size:18px">ความรู้เรื่องประจำเดือน</h2><div></div></div>
+  <div id="knowledge-list"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ====== Firebase config (ใส่ค่าของคุณเอง) ======
+const firebaseConfig = {
+  apiKey: "AIzaSyAOuFDb2MwzJYproQavJc3o3UCtpjFV258",
+  authDomain: "tahfiz-af7b0.firebaseapp.com",
+  projectId: "tahfiz-af7b0",
+  storageBucket: "tahfiz-af7b0.firebasestorage.app",
+  messagingSenderId: "1073903421",
+  appId: "1:1073903421:web:f25b68859d0e619a9ab754"
+};
+let useFirebase = false, auth=null, db=null;
+try {
+  if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+    firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth(); db = firebase.firestore();
+    useFirebase = true;
+  }
+} catch(e){ console.warn("Firebase not initialized:", e); }
+
+// ====== Gemini API (สำหรับวิเคราะห์เพิ่มเติม) ======
+const GEMINI_API_KEY = "AIzaSyBy_FSkYX5ofssiP7RIrUQ2XRlU11vWSTI";
+
+// ====== ลิงก์ PDF อัซกัร (Hisn Al-Muslim) ======
+const AZKAR_PDF_URL = "https://www.islaminthailand.org/media/book/AdhkaarA5-2561.pdf";
+
+// ====== Local storage (แยกตามผู้ใช้) ======
+// คีย์ของบันทึกขึ้นกับชื่อผู้ใช้ปัจจุบัน → ข้อมูลไม่ปนข้ามบัญชี
+function curUserName(){ const u = JSON.parse(localStorage.getItem('amwc_user')||'null'); return u && u.name ? u.name : null; }
+function recKey(){ const n = curUserName(); return 'amwc_records__' + (n||'__guest'); }
+function visitKey(){ const n = curUserName(); return 'amwc_visits__' + (n||'__guest'); }
+
+const LS = {
+  user: () => JSON.parse(localStorage.getItem('amwc_user')||'null'),
+  setUser: u => localStorage.setItem('amwc_user', JSON.stringify(u)),
+  clearUser: () => localStorage.removeItem('amwc_user'),
+  records: () => JSON.parse(localStorage.getItem(recKey())||'[]'),
+  setRecords: a => localStorage.setItem(recKey(), JSON.stringify(a)),
+  addRecord: r => { const a=LS.records(); a.unshift(r); LS.setRecords(a); },
+  users: () => JSON.parse(localStorage.getItem('amwc_users')||'{}'),
+  setUsers: u => localStorage.setItem('amwc_users', JSON.stringify(u)),
+};
+
+// ====== Firebase records helpers (ผูกกับ uid ของแต่ละบัญชี) ======
+async function fbLoadRecords(){
+  if (!useFirebase || !auth.currentUser) return null;
+  try{
+    const snap = await db.collection('records')
+      .where('uid','==', auth.currentUser.uid)
+      .orderBy('date','desc').limit(200).get();
+    return snap.docs.map(d=>d.data());
+  }catch(e){ console.warn('fbLoadRecords', e); return null; }
+}
+// ดึงจาก Firebase เข้ามาใส่ local cache (ของผู้ใช้คนนี้) เพื่อให้ปฏิทิน/หน้าแรกใช้
+async function syncRecordsFromFirebase(){
+  const fb = await fbLoadRecords();
+  if (fb && fb.length){ LS.setRecords(fb); }
+}
+
+// ====== Dark / Private mode ======
+function applyPrefs(){
+  const dark = localStorage.getItem('amwc_dark')==='1';
+  const priv = localStorage.getItem('amwc_private')==='1';
+  document.body.classList.toggle('dark', dark);
+  document.body.classList.toggle('private', priv);
+  document.getElementById('btn-dark').classList.toggle('active', dark);
+  document.getElementById('btn-private').classList.toggle('active', priv);
+}
+document.getElementById('btn-dark').addEventListener('click', ()=>{
+  localStorage.setItem('amwc_dark', localStorage.getItem('amwc_dark')==='1'?'0':'1'); applyPrefs();
+});
+document.getElementById('btn-private').addEventListener('click', ()=>{
+  localStorage.setItem('amwc_private', localStorage.getItem('amwc_private')==='1'?'0':'1'); applyPrefs();
+});
+applyPrefs();
+
+// ====== Anxiety detector (ตรวจจับการเข้าบ่อย) ======
+const COMFORT_MSGS = [
+  'หายใจลึก ๆ นะคะ 🌸 อัลลอฮ์ทรงอยู่ใกล้กว่าเส้นเลือดที่คอของคุณเสมอ — ทุกอย่างจะค่อย ๆ ดีขึ้น',
+  'ความกังวลคือสัญญาณว่าคุณใส่ใจตัวเอง 💜 ลองพักสายตา จิบน้ำอุ่น แล้วกล่าว "อัลฮัมดุลิลลาฮ์" สักครั้งนะคะ',
+  'คุณไม่ได้อยู่คนเดียวค่ะ 🤲 ทุกความเปลี่ยนแปลงของร่างกายเป็นเรื่องธรรมชาติ ลองอ่านอัซกัรสักบทเพื่อความสงบใจ',
+];
+function trackVisit(){
+  const today = new Date().toDateString();
+  const v = JSON.parse(localStorage.getItem(visitKey())||'{}');
+  if (v.day !== today){ v.day = today; v.count = 0; v.shown = false; }
+  v.count = (v.count||0) + 1;
+  localStorage.setItem(visitKey(), JSON.stringify(v));
+  return v;
+}
+function maybeShowComfort(){
+  const today = new Date().toDateString();
+  const v = JSON.parse(localStorage.getItem(visitKey())||'{}');
+  const banner = document.getElementById('comfort-banner');
+  if (!banner) return;
+  if (v.day===today && v.count>=4){
+    const msg = COMFORT_MSGS[v.count % COMFORT_MSGS.length];
+    banner.innerHTML = '<b>💗 ข้อความปลอบใจ</b><br>'+msg+'<br><small style="color:var(--text-light)">ระบบสังเกตว่าคุณเปิดแอปบ่อยวันนี้ ('+v.count+' ครั้ง) — หวังว่าคำนี้จะช่วยให้ใจสงบลงนะคะ</small>';
+    banner.classList.remove('hidden');
+  } else {
+    banner.classList.add('hidden');
+  }
+}
+
+// ====== ปุ่มอัซกัร / กำลังใจ ======
+document.addEventListener('DOMContentLoaded', ()=>{});
+setTimeout(()=>{
+  const az = document.getElementById('btn-azkar');
+  if (az) az.addEventListener('click', ()=> window.open(AZKAR_PDF_URL, '_blank'));
+  const cf = document.getElementById('btn-comfort');
+  if (cf) cf.addEventListener('click', ()=>{
+    const m = COMFORT_MSGS[Math.floor(Math.random()*COMFORT_MSGS.length)];
+    toast(m);
+  });
+}, 0);
+
+
+// ====== Navigation ======
+const pages = ['welcome','login','register','home','record1','record2','record3','record4','calendar','ibadah','knowledge'];
+function go(name){
+  pages.forEach(p => document.getElementById('page-'+p).classList.add('hidden'));
+  const el = document.getElementById('page-'+name);
+  if (el) el.classList.remove('hidden');
+  window.scrollTo(0,0);
+  if (name==='home'){ trackVisit(); maybeShowComfort(); refreshLatest(); }
+  if (name==='calendar') renderCalendar();
+  if (name==='ibadah') renderIbadah();
+  if (name==='knowledge') renderKnowledge();
+}
+document.addEventListener('click', e=>{
+  const t = e.target.closest('[data-go]');
+  if (t){ go(t.dataset.go); }
+});
+
+// ====== Toast ======
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+// ====== Auth ======
+document.getElementById('form-register').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const name = document.getElementById('reg-name').value.trim();
+  const age = document.getElementById('reg-age').value;
+  const pass = document.getElementById('reg-pass').value;
+  if (!name || !pass) return;
+  const email = name.toLowerCase().replace(/\s+/g,'') + '@muslimcare.app';
+  try {
+    if (useFirebase){
+      const cred = await auth.createUserWithEmailAndPassword(email, pass);
+      await db.collection('users').doc(cred.user.uid).set({name, age, createdAt: Date.now()});
+    } else {
+      const users = LS.users();
+      if (users[name]) { toast('ชื่อผู้ใช้นี้มีอยู่แล้ว'); return; }
+      users[name] = {pass, age};
+      LS.setUsers(users);
+    }
+    LS.setUser({name, age});
+    toast('สมัครสำเร็จ');
+    go('home');
+  } catch(err){ toast('ผิดพลาด: '+err.message); }
+});
+
+document.getElementById('form-login').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const name = document.getElementById('login-name').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const email = name.toLowerCase().replace(/\s+/g,'') + '@muslimcare.app';
+  try {
+    if (useFirebase){
+      await auth.signInWithEmailAndPassword(email, pass);
+    } else {
+      const users = LS.users();
+      if (!users[name] || users[name].pass !== pass){ toast('ชื่อหรือรหัสผ่านไม่ถูกต้อง'); return; }
+    }
+    LS.setUser({name});
+    toast('ยินดีต้อนรับ '+name);
+    go('home');
+  } catch(err){ toast('เข้าสู่ระบบไม่สำเร็จ: '+err.message); }
+});
+
+document.getElementById('btn-logout').addEventListener('click', async ()=>{
+  if (useFirebase) try{ await auth.signOut(); }catch(e){}
+  // ล้าง local cache เฉพาะของผู้ใช้คนนี้ (กันข้อมูลปนกับบัญชีอื่นที่มาล็อกอินทีหลังในเครื่องเดียวกัน)
+  try{ localStorage.removeItem(recKey()); localStorage.removeItem(visitKey()); }catch(e){}
+  LS.clearUser();
+  go('welcome');
+});
+
+// ====== Record Step 1 ======
+let recState = { color:null, type:null, days:1 };
+
+document.getElementById('color-grid').addEventListener('click', e=>{
+  const b = e.target.closest('.blood-color-btn'); if(!b) return;
+  document.querySelectorAll('#color-grid .blood-color-btn').forEach(x=>x.classList.remove('selected'));
+  b.classList.add('selected'); recState.color = b.dataset.color;
+});
+document.getElementById('type-grid').addEventListener('click', e=>{
+  const b = e.target.closest('.blood-type-btn'); if(!b) return;
+  document.querySelectorAll('#type-grid .blood-type-btn').forEach(x=>x.classList.remove('selected'));
+  b.classList.add('selected'); recState.type = b.dataset.type;
+});
+document.getElementById('dur-minus').addEventListener('click', ()=>{
+  if (recState.days>1){ recState.days--; document.getElementById('dur-val').textContent = recState.days; }
+});
+document.getElementById('dur-plus').addEventListener('click', ()=>{
+  if (recState.days<15){ recState.days++; document.getElementById('dur-val').textContent = recState.days; }
+});
+
+document.getElementById('btn-to-step2').addEventListener('click', ()=>{
+  if (!recState.color || !recState.type){ toast('กรุณาเลือกสีและลักษณะของเลือด'); return; }
+  analyze();
+  go('record2');
+});
+
+// ====== Analysis logic ======
+function analyze(){
+  let conf = 50;
+  if (['แดงสด','แดงเข้ม'].includes(recState.color)) conf += 25;
+  if (recState.color === 'น้ำตาล') conf += 5;
+  if (recState.color === 'ดำ') conf -= 10;
+  if (recState.color === 'ชมพูจาง') conf -= 15;
+  if (recState.type === 'ข้น' || recState.type === 'มีลิ่มเลือด') conf += 10;
+  if (recState.days >= 3 && recState.days <= 7) conf += 10;
+  if (recState.days < 3) conf -= 10;
+  if (recState.days > 10) conf -= 20;
+  conf = Math.max(5, Math.min(98, conf));
+  recState.confidence = conf;
+  recState.isPeriod = conf >= 60;
+
+  document.getElementById('confidence').textContent = conf+'%';
+  setTimeout(()=> document.getElementById('bar-fill').style.width = conf+'%', 50);
+  document.getElementById('analysis-title').textContent = recState.isPeriod ? 'มีแนวโน้มเป็นประจำเดือน (Haid)' : 'อาจไม่ใช่ประจำเดือน (Istihadah)';
+
+  document.getElementById('advice-text').textContent = recState.isPeriod
+    ? 'จากข้อมูล ลักษณะเลือดและระยะเวลาเข้าข่ายประจำเดือน (Haid) ควรงดละหมาดและถือศีลอดในช่วงนี้ และเริ่มชดเชยหลังหมด'
+    : 'อาการอาจเป็นเลือดผิดปกติ (Istihadah) ซึ่งไม่ห้ามอิบาดะฮ์ ควรทำความสะอาดและละหมาดตามปกติ';
+
+  // Step 3
+  document.getElementById('diag-summary').textContent = recState.isPeriod
+    ? 'ระบบประเมินว่าเป็น Haid (ประจำเดือน) ด้วยความมั่นใจ '+conf+'%'
+    : 'ระบบประเมินว่าน่าจะเป็น Istihadah (เลือดผิดปกติ) ความมั่นใจ '+(100-conf)+'%';
+  document.getElementById('diag-detail').textContent =
+    'สี: '+recState.color+' | ลักษณะ: '+recState.type+' | ระยะเวลา: '+recState.days+' วัน';
+  document.getElementById('diag-medical').textContent = recState.days > 10
+    ? 'ระยะเวลายาวเกิน 10 วัน ควรพบแพทย์เพื่อตรวจเพิ่มเติม'
+    : 'อาการอยู่ในเกณฑ์ปกติ ดูแลสุขอนามัยและพักผ่อนให้เพียงพอ';
+
+  // Step 4
+  document.getElementById('ibadah-pray').textContent = recState.isPeriod
+    ? 'งดละหมาดในช่วงมีประจำเดือน ไม่ต้องชดเชยหลังหมด'
+    : 'ละหมาดได้ตามปกติ พร้อมทำวุฎูอ์ใหม่ทุกครั้งที่จะละหมาด';
+  document.getElementById('ibadah-fast').textContent = recState.isPeriod
+    ? 'งดถือศีลอด และต้องชดเชย (Qadha) ภายหลัง'
+    : 'ถือศีลอดได้ตามปกติ';
+  document.getElementById('ibadah-quran').textContent = recState.isPeriod
+    ? 'ตามมัซฮับส่วนใหญ่ ควรงดสัมผัสและอ่านอัลกุรอานโดยตรง สามารถฟังหรือกล่าวซิกร์ได้'
+    : 'อ่านและสัมผัสอัลกุรอานได้ตามปกติ';
+}
+
+document.getElementById('btn-to-step3').addEventListener('click', async ()=>{
+  const rec = {
+    ...recState,
+    date: new Date().toISOString(),
+    user: (LS.user()||{}).name || 'guest'
+  };
+  try {
+    if (useFirebase && auth.currentUser){
+      await db.collection('records').add({...rec, uid: auth.currentUser.uid});
+    }
+  } catch(e){ console.warn(e); }
+  LS.addRecord(rec);
+  go('record3');
+});
+document.getElementById('btn-to-step4').addEventListener('click', ()=> go('record4'));
+
+// ====== Home latest ======
+async function refreshLatest(){
+  await syncRecordsFromFirebase();
+  const rs = LS.records();
+  const info = document.getElementById('latest-info');
+  const btn = document.getElementById('btn-view-latest');
+  if (!rs.length){
+    info.innerHTML = '<p class="no-record"><i class="fa-regular fa-folder-open"></i><br>ยังไม่มีข้อมูล</p>';
+    btn.style.display = 'none';
+    return;
+  }
+  const r = rs[0];
+  const d = new Date(r.date);
+  info.innerHTML = '<div class="latest-date">'+d.toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'})+'</div>'+
+    '<p style="color:var(--text-light);font-size:13px">'+(r.isPeriod?'Haid':'Istihadah')+' • '+r.days+' วัน • '+r.color+'</p>';
+  btn.style.display = '';
+  btn.onclick = ()=>{ recState = r; analyze(); go('record3'); };
+}
+
+// ====== Calendar ======
+let calDate = new Date();
+async function renderCalendar(){
+  await syncRecordsFromFirebase();
+  const grid = document.getElementById('cal-grid');
+  const months = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  document.getElementById('cal-month').textContent = months[calDate.getMonth()]+' '+(calDate.getFullYear()+543);
+  grid.innerHTML = '';
+  ['อา','จ','อ','พ','พฤ','ศ','ส'].forEach(d=>{ const e=document.createElement('div'); e.className='calendar-day-header'; e.textContent=d; grid.appendChild(e); });
+  const first = new Date(calDate.getFullYear(), calDate.getMonth(), 1);
+  const last = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0);
+  for (let i=0;i<first.getDay();i++){ grid.appendChild(document.createElement('div')); }
+  const today = new Date();
+  // mark from records
+  const rs = LS.records();
+  const periodDays = new Set();
+  rs.forEach(r=>{
+    if (!r.isPeriod) return;
+    const s = new Date(r.date);
+    for (let i=0;i<r.days;i++){
+      const x = new Date(s); x.setDate(s.getDate()+i);
+      if (x.getMonth()===calDate.getMonth() && x.getFullYear()===calDate.getFullYear()) periodDays.add(x.getDate());
+    }
+  });
+  for (let d=1; d<=last.getDate(); d++){
+    const el = document.createElement('div');
+    el.className = 'calendar-day';
+    el.textContent = d;
+    if (periodDays.has(d)) el.classList.add('period');
+    if (d===today.getDate() && calDate.getMonth()===today.getMonth() && calDate.getFullYear()===today.getFullYear()) el.classList.add('today');
+    grid.appendChild(el);
+  }
+}
+document.getElementById('cal-prev').addEventListener('click', ()=>{ calDate.setMonth(calDate.getMonth()-1); renderCalendar(); });
+document.getElementById('cal-next').addEventListener('click', ()=>{ calDate.setMonth(calDate.getMonth()+1); renderCalendar(); });
+
+// ====== Ibadah Mode ======
+const ibadahDocs = {
+  pray: {h:'การละหมาดในช่วงมีประจำเดือน', p:'ผู้หญิงที่มีประจำเดือนได้รับการยกเว้นจากการละหมาด และไม่ต้องชดเชยภายหลัง เมื่อสะอาดแล้วให้อาบน้ำใหญ่ (ฆุสล์) และละหมาดตามปกติ'},
+  fast: {h:'การถือศีลอด', p:'ผู้หญิงที่มีประจำเดือนงดถือศีลอด และต้องชดเชยจำนวนวันที่ขาดในภายหลัง'},
+  quran: {h:'การอ่านอัลกุรอาน', p:'ตามมัซฮับส่วนใหญ่ ควรงดสัมผัสมุศฮัฟโดยตรง การฟังและกล่าวซิกร์อนุญาตได้ตลอดเวลา'},
+  hajj: {h:'การประกอบพิธีฮัจญ์', p:'สามารถทำพิธีฮัจญ์ได้ ยกเว้นการเฏาะวาฟรอบกะอ์บะฮ์ ต้องรอจนกว่าจะสะอาด'},
+};
+function renderIbadah(){
+  const k = document.getElementById('ibadah-topic').value;
+  const d = ibadahDocs[k];
+  document.getElementById('ibadah-content').innerHTML = '<h4>'+d.h+'</h4><p>'+d.p+'</p>';
+}
+document.getElementById('ibadah-topic').addEventListener('change', renderIbadah);
+
+// ====== Knowledge ======
+const knowledgeDocs = [
+  {icon:'fa-droplet', h:'ประจำเดือนคืออะไร', p:'ประจำเดือนคือการที่เยื่อบุโพรงมดลูกหลุดลอกออกมาเป็นเลือดทุก 21–35 วัน นาน 3–7 วัน'},
+  {icon:'fa-heart-pulse', h:'อาการก่อนมีประจำเดือน (PMS)', p:'อารมณ์แปรปรวน เจ็บเต้านม ปวดท้องน้อย อ่อนเพลีย — เป็นเรื่องปกติ ดูแลด้วยการพักผ่อน'},
+  {icon:'fa-utensils', h:'อาหารที่ควรทาน', p:'ธัญพืชเต็มเมล็ด ผักใบเขียว ผลไม้ ดื่มน้ำมาก ๆ หลีกเลี่ยงคาเฟอีนและของหวานจัด'},
+  {icon:'fa-circle-exclamation', h:'เมื่อไรควรพบแพทย์', p:'ประจำเดือนมานานเกิน 10 วัน, ปวดรุนแรง, มาไม่สม่ำเสมอเกิน 3 เดือน'},
+];
+function renderKnowledge(){
+  const c = document.getElementById('knowledge-list');
+  c.innerHTML = knowledgeDocs.map((d,i)=>(
+    '<div class="knowledge-card" data-k="'+i+'"><h4><i class="fa-solid '+d.icon+'"></i>'+d.h+'</h4><p>'+d.p+'</p>'+
+    '<div class="knowledge-content" id="kc-'+i+'"><h5>รายละเอียด</h5><p>'+d.p+'</p></div></div>'
+  )).join('');
+  c.querySelectorAll('.knowledge-card').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      el.querySelector('.knowledge-content').classList.toggle('show');
+    });
+  });
+}
+
+// ====== Init ======
+// ====== Init ======
+// ถ้ามี Firebase และยังมี session อยู่ ให้ sync แล้วเข้าหน้า home
+if (useFirebase){
+  auth.onAuthStateChanged(async u=>{
+    if (u){
+      // เก็บ name จาก Firestore เพื่อใช้เป็น namespace ของ local cache
+      try{
+        const doc = await db.collection('users').doc(u.uid).get();
+        const name = (doc.exists && doc.data().name) ? doc.data().name : (u.email||'user').split('@')[0];
+        LS.setUser({name, uid:u.uid});
+      }catch(e){ LS.setUser({name:(u.email||'user').split('@')[0], uid:u.uid}); }
+      await syncRecordsFromFirebase();
+      go('home');
+    } else if (!LS.user()) {
+      go('welcome');
+    } else {
+      go('home');
+    }
+  });
+} else {
+  if (LS.user()) go('home'); else go('welcome');
+}
+</script>
+</body>
+</html>
