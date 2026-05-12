@@ -23,6 +23,7 @@
   --text-dark:#2D2D2D;--text-light:#666;--white:#fff;
   --red-blood:#DC143C;--dark-red:#8B0000;--brown:#8B4513;--black:#1A1A1A;--light-pink-blood:#FFB6C1;
 }
+<style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Kanit','Prompt',sans-serif;background:linear-gradient(180deg,#FFF0F5 0%,#F5EEF8 50%,#E8DAEF 100%);min-height:100vh;color:var(--text-dark);overflow-x:hidden}
 .hidden{display:none!important}
@@ -159,18 +160,137 @@ body.dark .calendar-day{color:#f0e6ff}
 body.dark .comfort-banner{background:linear-gradient(135deg,#3a2456,#2d1f4a);color:#f0e6ff}
 
 /* Private mode */
-body.private .latest-record-card,body.private #latest-info,body.private .calendar-day.period,body.private .calendar-day.predicted{filter:blur(10px);transition:filter .3s}
-body.private .latest-record-card:hover,body.private .latest-record-card:active{filter:none}
-body.private::before{content:"🔒 โหมดส่วนตัวเปิดอยู่ — ข้อมูลถูกซ่อน";position:fixed;top:60px;left:50%;transform:translateX(-50%);background:var(--primary-purple);color:#fff;padding:6px 14px;border-radius:20px;font-size:12px;z-index:998}
+/* 1. สั่งเบลอ Container หลักทั้งหมดเมื่ออยู่ในโหมด Private */
+/* เลือกเบลอทุกอย่างที่เป็น Page และ Logo */
+body.private .page, 
+body.private .global-logos,
+body.private .latest-record-card,
+body.private #latest-info {
+  filter: blur(50px) grayscale(100%) !important; /* เพิ่มเป็น 50px และขาวดำ 100% */
+  pointer-events: none !important; /* ป้องกันการกด */
+  user-select: none !important;
+  opacity: 0.6; /* ลดความโปร่งใสลงด้วยเพื่อให้มองยากขึ้นไปอีก */
+  transition: filter 0.3s ease;
+}
+
+/* ป้องกันไม่ให้มีการ "คลายเบลอ" เมื่อกดค้าง (ลบอันเก่าทิ้งแล้วใช้ตัวนี้) */
+body.private .page:active, 
+body.private .page:hover {
+  filter: blur(50px) grayscale(100%) !important;
+}
+
+/* เพิ่มแผ่นใสสีทึบมาปิดทับอีกชั้นหนึ่ง (Overlay) */
+body.private::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1); /* ม่านสีดำบางๆ */
+  z-index: 998; /* อยู่ใต้ปุ่มกดแต่ทับเนื้อหา */
+  pointer-events: none;
+}
+
+/* 3. ปรับแต่งแถบแจ้งเตือนด้านบน */
+body.private::before {
+  content: "🔒 โหมดส่วนตัวทำงานอยู่";
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(106, 58, 222, 0.9); /* สีม่วงโปร่งแสง */
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 9999;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  white-space: nowrap;
+  pointer-events: none; /* เพื่อให้คลิกทะลุไปกดปุ่มข้างหลังได้ */
+}
+
+/* 4. หน้ากากสีขาว/ดำ จางๆ ทับหน้าจอเพื่อให้ดูเนียนขึ้น */
+body.private::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1); /* หรือ rgba(0,0,0,0.1) ใน Dark Mode */
+  z-index: 998;
+  pointer-events: none;
+}
+/* =========================================
+  <style>
+/* ... (CSS เดิมของคุณด้านบนทั้งหมด) ... */
+
+.global-logos {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    gap: 12px;
+    z-index: 999;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 8px 12px;
+    border-radius: 30px;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(4px);
+    align-items: center;
+}
+body.dark .global-logos {
+    background: rgba(45, 31, 74, 0.6);
+}
+.global-logos img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--secondary-pink);
+    transition: transform 0.1s; /* เพิ่มเพื่อให้ดูนุ่มนวลเวลาสะท้อนการกด */
+}
+
+/* เพิ่ม CSS สำหรับส่วนลิงก์ที่ครอบโลโก้ */
+.global-logos a {
+    display: flex;
+    text-decoration: none;
+}
+.global-logos a:active img {
+    transform: scale(0.9); /* เวลาจิ้มแล้วให้โลโก้ยุบตัวลง 10% */
+}
 </style>
 </head>
 <body>
 
-<!-- Floating top controls (visible everywhere) -->
+<!-- =========================================ห
+     ส่วนที่เพิ่มใหม่: HTML สำหรับ 3 โลโก้ (ใส่ Link เรียบร้อย)
+     ========================================= -->
+<div class="global-logos">
+  <!-- เปลี่ยน URL ใน href=" " เป็นลิงก์เพจที่ต้องการได้เลยครับ -->
+  <a href="https://www.facebook.com/share/17m3cT7tW4/" target="_blank">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzPz9CeFZA-YTlI7VBz8vQ0EVZEyZr7eM5Rw&s" alt="Logo 1">
+  </a>
+
+  <a href="https://attarkiah.ac.th/" target="_blank">
+    <img src="https://attarkiah.ac.th/wp-content/uploads/2025/03/cropped-logo_att.jpg" alt="Logo 2">
+  </a>
+
+  <a href="https://www.facebook.com/share/1Cw1fB2ctg/" target="_blank">
+    <img src="https://scontent.fbkk8-2.fna.fbcdn.net/v/t39.30808-6/696187910_122100299517312449_1965577196789858038_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=13d280&_nc_ohc=BJnHzlmQGesQ7kNvwFnOmC9&_nc_oc=AdqLDxP1P9NGqfhyhTpo6nWr0sD-mWsa5AIbRFM77dIanTsnBbW3GjbUYM72NBoVRaM&_nc_zt=23&_nc_ht=scontent.fbkk8-2.fna&_nc_gid=SBEH_qwkLYWiVBNKXA8gSA&_nc_ss=7b2a8&oh=00_Af767QUXaF-Hy8VV_EBLhtGEh_5ovgBPIdHu6PJnyoMqXA&oe=6A08A964" alt="Logo 3">
+  </a>
+</div>
+
+<!-- โค้ดส่วนที่เหลือของคุณ... -->
+<!-- Floating top controls (visible everywhere) (โค้ดเดิมของคุณ) -->
 <div class="top-controls">
   <button id="btn-dark" title="โหมดมืด"><i class="fa-solid fa-moon"></i></button>
   <button id="btn-private" title="โหมดส่วนตัว"><i class="fa-solid fa-eye-slash"></i></button>
 </div>
+
+<!-- โค้ดส่วนอื่นๆ ของหน้าเว็บคุณใส่ต่อจากตรงนี้ได้เลยครับ -->
 
 
 
@@ -195,7 +315,7 @@ body.private::before{content:"🔒 โหมดส่วนตัวเปิด
   <form id="form-register">
     <div class="form-group"><label>ชื่อผู้ใช้</label><input type="text" id="reg-name" required></div>
     <div class="form-group"><label>อายุ</label><input type="number" id="reg-age" min="9" max="80" required></div>
-    <div class="form-group"><label>รหัสผ่าน</label><input type="password" id="reg-pass" minlength="6" required></div>
+    <div class="form-group"><label>รหัสผ่าน6หลัก</label><input type="password" id="reg-pass" minlength="6" required></div>
     <button type="submit" class="submit-btn">บันทึกข้อมูล</button>
   </form>
 </div>
@@ -323,12 +443,12 @@ body.private::before{content:"🔒 โหมดส่วนตัวเปิด
     <p id="diag-medical">...</p>
   </div>
 
-  <button class="submit-btn" id="btn-to-step4">ถัดไป: แนวทางการบูชา <i class="fa-solid fa-arrow-right"></i></button>
+  <button class="submit-btn" id="btn-to-step4">ถัดไป: แนวทางการอีบาดะห์ <i class="fa-solid fa-arrow-right"></i></button>
 </div>
 
 <!-- Record Step 4 - Ibadah guidance -->
 <div id="page-record4" class="page hidden">
-  <div class="header"><button class="back-btn" data-go="record3"><i class="fa-solid fa-arrow-left"></i></button><h2 style="font-size:18px">แนวทางการบูชา</h2><div></div></div>
+  <div class="header"><button class="back-btn" data-go="record3"><i class="fa-solid fa-arrow-left"></i></button><h2 style="font-size:18px">แนวทางการอีบาดะห์</h2><div></div></div>
   <div class="step-indicator"><div class="step"></div><div class="step"></div><div class="step"></div><div class="step active"></div><div class="step-text">ขั้นตอนที่ 4 จาก 4</div></div>
 
   <div class="advice-card">
@@ -389,6 +509,7 @@ body.private::before{content:"🔒 โหมดส่วนตัวเปิด
 
 <div class="toast" id="toast"></div>
 
+
 <script>
 // ====== Firebase config (ใส่ค่าของคุณเอง) ======
 const firebaseConfig = {
@@ -448,20 +569,39 @@ async function syncRecordsFromFirebase(){
 }
 
 // ====== Dark / Private mode ======
+// ====== Dark / Private mode ======
 function applyPrefs(){
-  const dark = localStorage.getItem('amwc_dark')==='1';
-  const priv = localStorage.getItem('amwc_private')==='1';
+  const dark = localStorage.getItem('amwc_dark') === '1';
+  const priv = localStorage.getItem('amwc_private') === '1';
+  
+  // ใส่ Class ให้ Body เพื่อให้ CSS ทำงาน
   document.body.classList.toggle('dark', dark);
   document.body.classList.toggle('private', priv);
-  document.getElementById('btn-dark').classList.toggle('active', dark);
-  document.getElementById('btn-private').classList.toggle('active', priv);
+  
+  // เปลี่ยนสถานะปุ่ม
+  const btnDark = document.getElementById('btn-dark');
+  const btnPriv = document.getElementById('btn-private');
+  
+  if (btnDark) btnDark.classList.toggle('active', dark);
+  if (btnPriv) {
+      btnPriv.classList.toggle('active', priv);
+      // เปลี่ยนไอคอนปุ่มตามสถานะ
+      btnPriv.innerHTML = priv ? '<i class="fa-solid fa-eye"></i>' : '<i class="fa-solid fa-eye-slash"></i>';
+  }
 }
+
+// Event Listeners
 document.getElementById('btn-dark').addEventListener('click', ()=>{
-  localStorage.setItem('amwc_dark', localStorage.getItem('amwc_dark')==='1'?'0':'1'); applyPrefs();
+  localStorage.setItem('amwc_dark', localStorage.getItem('amwc_dark')==='1'?'0':'1'); 
+  applyPrefs();
 });
+
 document.getElementById('btn-private').addEventListener('click', ()=>{
-  localStorage.setItem('amwc_private', localStorage.getItem('amwc_private')==='1'?'0':'1'); applyPrefs();
+  localStorage.setItem('amwc_private', localStorage.getItem('amwc_private')==='1'?'0':'1'); 
+  applyPrefs();
 });
+
+// เรียกใช้ครั้งแรกเมื่อโหลดหน้า
 applyPrefs();
 
 // ====== Anxiety detector (ตรวจจับการเข้าบ่อย) ======
@@ -705,7 +845,7 @@ async function renderCalendar(){
     if (!r.isPeriod) return;
     const s = new Date(r.date);
     for (let i=0;i<r.days;i++){
-      const x = new Date(s); x.setDate(s.getDate()+i);
+      const x = new Date(s); x.setDate(s.getDate()-i);
       if (x.getMonth()===calDate.getMonth() && x.getFullYear()===calDate.getFullYear()) periodDays.add(x.getDate());
     }
   });
@@ -723,17 +863,99 @@ document.getElementById('cal-next').addEventListener('click', ()=>{ calDate.setM
 
 // ====== Ibadah Mode ======
 const ibadahDocs = {
-  pray: {h:'การละหมาดในช่วงมีประจำเดือน', p:'ผู้หญิงที่มีประจำเดือนได้รับการยกเว้นจากการละหมาด และไม่ต้องชดเชยภายหลัง เมื่อสะอาดแล้วให้อาบน้ำใหญ่ (ฆุสล์) และละหมาดตามปกติ'},
-  fast: {h:'การถือศีลอด', p:'ผู้หญิงที่มีประจำเดือนงดถือศีลอด และต้องชดเชยจำนวนวันที่ขาดในภายหลัง'},
-  quran: {h:'การอ่านอัลกุรอาน', p:'ตามมัซฮับส่วนใหญ่ ควรงดสัมผัสมุศฮัฟโดยตรง การฟังและกล่าวซิกร์อนุญาตได้ตลอดเวลา'},
-  hajj: {h:'การประกอบพิธีฮัจญ์', p:'สามารถทำพิธีฮัจญ์ได้ ยกเว้นการเฏาะวาฟรอบกะอ์บะฮ์ ต้องรอจนกว่าจะสะอาด'},
+  pray: {
+    h: '1. การละหมาด: วิถีแห่งการผ่อนปรนและตัวบทที่ชัดแจ้ง',
+    p: `
+    <strong>● ตัวบทฮาดิษ (Evidence):</strong> <br>
+    ท่านนบี ﷺ กล่าวแก่ท่านหญิงฟาฏิมะฮ์ บินติ อบีหุบัยช์ว่า: <br>
+    <p style="color: #1a5276; font-style: italic; background: #eef2f3; padding: 10px; border-radius: 5px;">
+    "فَإِذَا أَقْبَلَتِ الْحَيْضَةُ فَدَعِي الصَّلاةَ" <br>
+    คำอ่าน: "ฟะอิดา อักบะละติล หัยเฎาะตุ ฟะดะอิซ เศาะลาฮ์"<br>
+    ความหมาย: <strong>"เมื่อประจำเดือนมาถึง เจ้าจงละทิ้งการละหมาด"</strong> (บันทึกโดย: Al-Bukhari)</p>
+    
+    <strong>● เจาะลึกเชิงวิชาการ (Technical Insight):</strong>
+    <ul>
+      <li><strong>ทำไมต้องทิ้ง?:</strong> สถานะของคนมีประจำเดือนในทางนิติศาสตร์เรียกว่า "ฮะดัษใหญ่" (Hadath Akbar) ซึ่งเป็นสภาวะที่ขัดแย้งกับ "ความบริสุทธิ์" (Taharah) ที่เป็นเงื่อนไขสำคัญของการละหมาด</li>
+      <li><strong>ทำไมไม่ต้องชดเชย?:</strong> ท่านหญิงอาอิชะฮ์ (ร.ด.) ตอบคำถามนี้ว่า <em>"นี่คือสิ่งที่เกิดขึ้นกับเรา และเราถูกสั่งให้ชดเชยศีลอด แต่ไม่ถูกสั่งให้ชดเชยละหมาด"</em> (Muslim) 
+      <br><strong>เหตุผลเชิงตรรกะ:</strong> มนุษย์ต้องละหมาด 1,825 เวลาต่อปี หากต้องชดเชยประจำเดือนทุกเดือน เดือนละ 35 เวลา จะเกิดสภาวะ <strong>Al-Mashaqqah (ความยากลำบากยิ่ง)</strong> ซึ่งขัดกับหลักการศาสนาที่ว่า "ศาสนานั้นคือความง่าย"</li>
+    </ul>
+    
+    <strong>● กรณีศึกษาที่คนมักพลาด:</strong> 
+    หากประจำเดือนหมดในช่วงเวลา <strong>"อัศรี"</strong> นักวิชาการส่วนใหญ่ (มัซฮับชาฟิอี/ฮัมบาลี) เห็นว่าต้องละหมาดซุฮรีควบด้วย เพราะเป็นเวลาที่รวมกันได้ในยามคับขัน`
+  },
+  fast: {
+    h: '2. การถือศีลอด: ความบริสุทธิ์ของวิญญาณและวินัยแห่งการชดเชย',
+    p: `
+    <strong>● ตัวบทฮาดิษ (Evidence):</strong> <br>
+    มีมติเอกฉันท์ (Ijma') จากฮาดิษที่ว่า: <br>
+    <p style="color: #1a5276; font-style: italic; background: #eef2f3; padding: 10px; border-radius: 5px;">
+    "أَلَيْسَ إِذَا حَاضَتْ لَمْ تُصَلِّ وَلَمْ تَصُمْ" <br>
+    ความหมาย: <strong>"มิใช่หรือว่า เมื่อนางมีประจำเดือน นางก็ไม่ได้ละหมาดและไม่ได้ถือศีลอด?"</strong> (บันทึกโดย: Al-Bukhari)</p>
+    
+    <strong>● เจาะลึกเชิงวิชาการ (Technical Insight):</strong>
+    <ul>
+      <li><strong>ความต่างจากละหมาด:</strong> การศีลอดมีเพียง "ปีละ 1 เดือน" การชดเชยเพียงไม่กี่วันจึงไม่สร้างความยากลำบาก และเป็นการรักษาสิทธิของพระเจ้าในฐานะ "รุก่นอิสลาม" (เสาหลัก)</li>
+      <li><strong>กฎทองช่วงฟัจญ์:</strong> หากเลือดหยุด <strong>"ก่อนแสงทองขึ้น"</strong> (True Dawn) แม้จะยังไม่ได้อาบน้ำใหญ่ การถือศีลอดวันนั้นถือว่า <strong>"ใช้ได้"</strong> 
+      <br><em>เหตุผล:</em> การอาบน้ำเป็นเงื่อนไขของละหมาด แต่ "การตั้งเจตนา (Niyyah)" ในสภาพที่สะอาดคือหัวใจของศีลอด</li>
+    </ul>`
+  },
+  quran: {
+    h: '3. การอ่านกุรอาน: ข้อถกเถียงระหว่าง "ความศักดิ์สิทธิ์" กับ "การเรียนรู้"',
+    p: `
+    <strong>● ตัวบทอ้างอิง (Reference):</strong> <br>
+    อัลลอฮ์ทรงตรัสในซูเราะฮ์ อัล-วากิอะฮ์ อายะฮ์ที่ 79: <br>
+    <p style="color: #1a5276; font-style: italic; background: #eef2f3; padding: 10px; border-radius: 5px;">
+    "لا يَمَسُّهُ إِلا الْمُطَهَّرُونَ" <br>
+    ความหมาย: <strong>"ไม่มีผู้ใดจะสัมผัสมัน (กุรอาน) นอกจากบรรดาผู้ที่บริสุทธิ์เท่านั้น"</strong></p>
+    
+    <strong>● เจาะลึกเชิงวิชาการ (Technical Insight):</strong>
+    <ul>
+      <li><strong>อิหม่ามมาลิกี (ทัศนะผ่อนปรน):</strong> อนุญาตให้อ่านปากเปล่าได้สำหรับ "ครูและนักเรียน" เพราะหากห้ามอ่านเป็นอาทิตย์ ความรู้จะเลือนหาย (Dharurah - ความจำเป็น)</li>
+      <li><strong>การแยกประเภท "ซิกิร" VS "กุรอาน":</strong> หากอ่านบทสวดสั้นๆ ที่มาจากกุรอาน (เช่น "บิสมิลลาฮ์" หรือ "ดุอาอ์ให้พ่อแม่") โดยมีเจตนาเพียงเพื่อ <strong>รำลึกถึงอัลลอฮ์</strong> ไม่ใช่เพื่อการอ่านกุรอานแบบพิธีกรรม นักวิชาการส่วนใหญ่ถือว่า <strong>"ทำได้"</strong></li>
+      <li><strong>นิยามมุศฮัฟ:</strong> หน้าจอ Tablet/Smartphone ไม่ถือเป็นมุศฮัฟ (เล่มกุรอาน) เพราะมันคือจุดรวมของแสงและแม่เหล็กไฟฟ้า ดังนั้นจึงสัมผัสหน้าจอได้ตามฟัตวาสมัยใหม่</li>
+    </ul>`
+  },
+  hajj: {
+    h: '4. การประกอบพิธีฮัจญ์: บททดสอบความอดทนและทางออกในภาวะวิกฤต',
+    p: `
+    <strong>● ตัวบทฮาดิษ (Evidence):</strong> <br>
+    ท่านนบี ﷺ กล่าวแก่ท่านหญิงอาอิชะฮ์ขณะที่นางร้องไห้เพราะมีประจำเดือนระหว่างฮัจญ์: <br>
+    <p style="color: #1a5276; font-style: italic; background: #eef2f3; padding: 10px; border-radius: 5px;">
+    "افْعَلِي مَا يَفْعَلُ الْحَاجُّ غَيْرَ أَنْ لا تَطُوفِي بِالْبَيْتِ حَتَّى تَطْهُرِي" <br>
+    ความหมาย: <strong>"จงทำสิ่งที่คนทำฮัจญ์เขาทำกัน เพียงแต่ "อย่าได้เฏาะวาฟ" รอบบัยตุลลอฮ์จนกว่าเจ้าจะสะอาด"</strong> (บันทึกโดย: Al-Bukhari)</p>
+    
+    <strong>● เจาะลึกเชิงวิชาการ (Technical Insight):</strong>
+    <ul>
+      <li><strong>สถานะของเฏาะวาฟ:</strong> การเฏาะวาฟมีสถานะเหมือนการละหมาด (Tawaf is like Prayer) จึงต้องมีความสะอาดจากฮะดัษ</li>
+      <li><strong>วิกฤตการณ์ "น้ำตาหญิง":</strong> กรณีที่ต้องเดินทางกลับแล้วประจำเดือนยังไม่หยุด และไม่สามารถรอได้ <strong>ท่านอิบน์ ตัยมียะฮ์</strong> ได้เปิดช่องทางนิติศาสตร์ที่สำคัญมากคือ: <em>ให้ใส่ผ้าอนามัยให้รัดกุม อาบน้ำใหญ่ และเฏาะวาฟได้เลย</em> ถือเป็นความเมตตาในกรณีที่สุดวิสัยจริงๆ (Hajah al-Masah)</li>
+    </ul>`
+  }
 };
+
 function renderIbadah(){
   const k = document.getElementById('ibadah-topic').value;
   const d = ibadahDocs[k];
-  document.getElementById('ibadah-content').innerHTML = '<h4>'+d.h+'</h4><p>'+d.p+'</p>';
+  
+  if (d) {
+    document.getElementById('ibadah-content').innerHTML = `
+      <div class="card" style="
+        background: #fff;
+        border-radius: 15px;
+        padding: 25px;
+        border-top: 6px solid #1a5276;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        animation: fadeIn 0.5s ease;
+      ">
+        <h2 style="color: #1a5276; font-size: 1.6rem; border-bottom: 1px solid #eee; padding-bottom: 15px;">${d.h}</h2>
+        <div style="line-height: 1.8; color: #34495e; font-size: 1.1rem; text-align: justify;">${d.p}</div>
+        
+        <div style="margin-top: 20px; padding: 10px; background: #fff9e6; border-left: 4px solid #f1c40f; font-size: 0.95rem;">
+          <strong>หมายเหตุจากตำรา:</strong> ข้อมูลนี้สรุปจาก Al-Mughni (Ibn Qudamah) และ Fatwa คณะกรรมการถาวรซาอุฯ (Lajnah Da'imah)
+        </div>
+      </div>
+    `;
+  }
 }
-document.getElementById('ibadah-topic').addEventListener('change', renderIbadah);
 
 // ====== Knowledge ======
 const knowledgeDocs = [
