@@ -228,29 +228,31 @@ body.private::after {
 /* ... (CSS เดิมของคุณด้านบนทั้งหมด) ... */
 
 .global-logos {
-    position: fixed;
-    top: 12px;
-    left: 12px;
+    /* เปลี่ยนจาก fixed เป็น relative เพื่อให้มันกินพื้นที่ในหน้าเว็บจริง */
+    position: relative; 
     display: flex;
-    gap: 12px;
+    justify-content: center; /* จัดโลโก้ให้อยู่กลางหน้า */
+    gap: 15px;
     z-index: 999;
-    background: rgba(255, 255, 255, 0.6);
-    padding: 8px 12px;
-    border-radius: 30px;
-    box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(4px);
-    align-items: center;
+    background: rgba(255, 255, 255, 0.8); /* เพิ่มความชัดของพื้นหลัง */
+    padding: 15px 0; /* เพิ่มพื้นที่ว่างบน-ล่าง */
+    border-bottom: 1px solid rgba(0,0,0,0.1); /* เพิ่มเส้นคั่นบางๆ ให้ดูเป็นระเบียบ */
+    margin-bottom: 10px; /* ดันเนื้อหาและปุ่มอื่นๆ ลงไปข้างล่าง */
+    width: 100%; /* ให้แถบสีขาวเต็มความกว้างจอ */
 }
+
 body.dark .global-logos {
-    background: rgba(45, 31, 74, 0.6);
+    background: rgba(45, 31, 74, 0.9);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
+
 .global-logos img {
-    width: 70px;
-    height: 70px;
+    width: 60px; /* ปรับขนาดให้พอดีกับแถบบน */
+    height: 60px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid var(--secondary-pink);
-    transition: transform 0.1s; /* เพิ่มเพื่อให้ดูนุ่มนวลเวลาสะท้อนการกด */
+    border: 2px solid var(--secondary-pink);
+    transition: transform 0.1s;
 }
 
 /* เพิ่ม CSS สำหรับส่วนลิงก์ที่ครอบโลโก้ */
@@ -280,6 +282,10 @@ body.dark .global-logos {
 
   <a href="https://www.facebook.com/share/1Cw1fB2ctg/" target="_blank">
     <img src="https://scontent.fbkk8-2.fna.fbcdn.net/v/t39.30808-6/696187910_122100299517312449_1965577196789858038_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=13d280&_nc_ohc=BJnHzlmQGesQ7kNvwFnOmC9&_nc_oc=AdqLDxP1P9NGqfhyhTpo6nWr0sD-mWsa5AIbRFM77dIanTsnBbW3GjbUYM72NBoVRaM&_nc_zt=23&_nc_ht=scontent.fbkk8-2.fna&_nc_gid=SBEH_qwkLYWiVBNKXA8gSA&_nc_ss=7b2a8&oh=00_Af767QUXaF-Hy8VV_EBLhtGEh_5ovgBPIdHu6PJnyoMqXA&oe=6A08A964" alt="Logo 3">
+  </a>
+
+  <a href="https://www.facebook.com/p/GATE-Gifted-and-Talented-education-Program-100057137453044/" target="_blank">
+    <img src="https://scontent.fhdy4-1.fna.fbcdn.net/v/t39.30808-6/301877362_576661704248406_5384817630648769590_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=NXnYaVKuzTIQ7kNvwHEpLIS&_nc_oc=AdpM2Hi2yuGwS1OvAAgX-olU4qCyUbdcgz4V9w5CM1oGCOuJ_jzA5SgnyvKbY5cZ-8dzHac9uddgZU7XgC1XhD47&_nc_zt=23&_nc_ht=scontent.fhdy4-1.fna&_nc_gid=5JNrNONlIW3T7nFFg6B4Tg&_nc_ss=7b2a8&oh=00_Af4qeVqdV9Tss8JmcYR-h4fKCRo7e-E52jcnYz-vl0msgg&oe=6A0902AA" alt="Logo 3">
   </a>
 </div>
 
