@@ -263,12 +263,13 @@ body.dark .global-logos {
 .global-logos a:active img {
     transform: scale(0.9); /* เวลาจิ้มแล้วให้โลโก้ยุบตัวลง 10% */
 }
+/* --- ส่วนเมนู Ibadah (Grid 2 คอลัมน์) --- */
 .ibadah-nav {
-  display: grid; /* เปลี่ยนจาก flex เป็น grid */
-  grid-template-columns: 1fr 1fr; /* แบ่งเป็น 2 คอลัมน์เท่ากัน */
-  gap: 12px; /* ระยะห่างระหว่างปุ่ม */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
   margin-bottom: 25px;
-  max-width: 400px; /* จำกัดความกว้างไม่ให้แผ่กว้างเกินไปบนจอคอม */
+  max-width: 400px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -276,33 +277,180 @@ body.dark .global-logos {
 .ibadah-btn {
   display: flex;
   align-items: center;
-  justify-content: center; /* จัดไอคอนและข้อความให้อยู่กลางปุ่ม */
+  justify-content: center;
   gap: 10px;
-  padding: 12px 10px; /* ปรับ padding เล็กน้อยเพื่อให้ลงตัว 2 คอลัมน์ */
+  padding: 12px 10px;
   background: #ffffff;
   color: #1a5276;
   border: 2px solid #eef2f3;
   border-radius: 50px; 
-  font-size: 0.95rem; /* ลดขนาดฟอนต์นิดหน่อยเพื่อให้กดง่ายบนมือถือ */
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   box-shadow: 0 4px 6px rgba(0,0,0,0.04);
-  width: 100%; /* ให้ปุ่มขยายเต็มพื้นที่คอลัมน์ */
+  width: 100%;
 }
 
-/* เอฟเฟกต์เวลาเอาเมาส์ชี้ หรือ กด */
 .ibadah-btn:hover {
   transform: translateY(-2px);
   border-color: #1a5276;
 }
 
-/* เอฟเฟกต์เวลาปุ่มถูกเลือก (Active) */
 .ibadah-btn.active {
   background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%);
   color: #ffffff;
   border-color: transparent;
   box-shadow: 0 6px 15px rgba(26, 82, 118, 0.2);
+}
+
+/* --- ส่วนหน้า Azkar 3D & PDF --- */
+
+/* 1. ตั้งค่ามิติ 3D ให้หน้า Azkar */
+/* ตั้งค่ามิติ 3D */
+/* ตั้งค่ามิติหน้าจอ */
+/* บังคับมิติ 3D ให้หน้า Azkar */
+/* 1. ตั้งค่ามิติ 3D ให้หน้า Azkar */
+#page-azkar {
+    perspective: 2500px !important;
+    background: #fdfaf1 !important; /* พื้นหลังสีนวลตา */
+}
+
+/* รัศมีออร่าสีทองแบบพุ่ง (Golden Sacred Glow) */
+/* --- 1. ลำแสงแฉกพุ่งออกมา (Light Beams) --- */
+.sacred-beams {
+    position: absolute;
+    top: 55%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    /* สร้างลำแสงเป็นแฉกๆ */
+    background: repeating-conic-gradient(
+        from 0deg,
+        rgba(255, 215, 0, 0) 0deg,
+        rgba(255, 215, 0, 0.3) 10deg,
+        rgba(255, 215, 0, 0) 20deg
+    );
+    z-index: 1;
+    mask-image: radial-gradient(circle, white 20%, transparent 70%);
+    animation: rotateBeams 20s linear infinite;
+}
+
+@keyframes rotateBeams {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* --- 2. ออร่าฟุ้งสว่าง (เดิม) --- */
+.sacred-aura {
+    position: absolute;
+    top: 55%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 550px; height: 550px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, rgba(212, 175, 55, 0) 70%);
+    filter: blur(40px);
+    z-index: 2;
+    mix-blend-mode: screen;
+    animation: auraPulse 4s ease-in-out infinite;
+}
+
+/* --- 3. ละอองทองพุ่งกระจาย (Gold Particles) --- */
+.gold-particles {
+    position: absolute;
+    top: 55%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%; height: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.gold-particles::before {
+    content: "";
+    position: absolute;
+    inset: -100px;
+    background-image: 
+        radial-gradient(circle, #fff 1px, transparent 1px),
+        radial-gradient(circle, #ffd700 1.5px, transparent 1.5px);
+    background-size: 40px 40px, 60px 60px;
+    background-position: 0 0, 20px 20px;
+    animation: particleFloat 6s linear infinite;
+    opacity: 0.8;
+    mask-image: radial-gradient(circle, white, transparent 80%);
+}
+
+@keyframes particleFloat {
+    0% { transform: translateY(0) scale(1); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+}
+
+@keyframes auraPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+}
+
+/* 3. โครงสร้างเล่มตำรา (Book Master) */
+.book-master {
+    position: relative;
+    width: 100%; 
+    height: 75vh;
+    z-index: 10;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+}
+
+/* 4. สันหนังสือสีทอง (Spine) */
+.book-spine-gold {
+    position: absolute;
+    left: -8px; 
+    top: 0; 
+    bottom: 0;
+    width: 18px;
+    background: linear-gradient(to right, #b7950b, #d4af37, #b7950b);
+    border-radius: 5px 0 0 5px;
+    transform: translateZ(-12px);
+    z-index: 11;
+}
+
+/* 5. เลเยอร์ปึกกระดาษหนาๆ (The Thickness) */
+.book-pages-stack, .book-thickness-layer {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    border-radius: 5px 15px 15px 5px;
+    box-shadow: 
+        3px 0 0 #e0e0e0, 
+        6px 0 0 #d0d0d0, 
+        9px 0 0 #c0c0c0, 
+        20px 20px 40px rgba(0,0,0,0.2); /* เงาตกกระทบพื้น */
+    transform: translateZ(-15px);
+}
+
+/* 6. กรอบใส่เนื้อหา PDF (Front Cover) */
+.book-frame-container, .book-cover-front {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    border: 1.5px solid #d4af37;
+    border-radius: 5px 15px 15px 5px;
+    overflow: hidden;
+    box-shadow: inset 12px 0 25px rgba(0,0,0,0.1); /* เงาร่องสันหนังสือ */
+}
+
+/* 7. แอนิเมชั่น Flip เปิดตำราศักดิ์สิทธิ์ */
+.page-open-anim {
+    animation: holyFlip 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards !important;
+}
+
+@keyframes holyFlip {
+    0% { 
+        transform: rotateY(-95deg) scale(0.85); 
+        opacity: 0; 
+    }
+    100% { 
+        transform: rotateY(0deg) scale(1); 
+        opacity: 1; 
+    }
 }
 </style>
 </head>
@@ -404,7 +552,8 @@ body.dark .global-logos {
     <button class="menu-card" data-go="calendar"><i class="fa-solid fa-calendar-days"></i><h4>ปฏิทินรอบเดือน</h4></button>
     <button class="menu-card" data-go="ibadah"><i class="fa-solid fa-hands-praying"></i><h4>Ibadah Mode</h4></button>
     <button class="menu-card" data-go="knowledge"><i class="fa-solid fa-book-quran"></i><h4>ความรู้เรื่องประจำเดือน</h4></button>
-    <button class="menu-card" id="btn-azkar"><i class="fa-solid fa-book-bookmark"></i><h4>อัซกัร (PDF)</h4></button>
+    <!-- แก้โดยการเพิ่ม data-go="azkar" และลบลิงก์เดิม (ถ้ามี) ออก -->
+    <button class="menu-card" data-go="azkar"><i class="fa-solid fa-book-bookmark"></i><h4>อัซกัร (PDF)</h4></button>
     <button class="menu-card" id="btn-comfort"><i class="fa-solid fa-heart-circle-check"></i><h4>กำลังใจวันนี้</h4></button>
   </div>
 
@@ -572,6 +721,48 @@ body.dark .global-logos {
   </div>
 </div>
 
+<div id="page-azkar" class="page hidden" style="overflow: visible !important;">
+  <!-- ส่วนหัว -->
+  <div class="header">
+    <button class="back-btn" data-go="home"><i class="fa-solid fa-arrow-left"></i></button>
+    <h2 style="font-size:18px; color: #9c640c; font-weight: bold;">อัซกัร (Hisn Al-Muslim)</h2>
+    <div></div>
+  </div>
+
+  <div class="container" style="padding: 20px; position: relative; min-height: 85vh; overflow: visible !important;">
+    
+    <!-- 1. ส่วนข้อความคำคม -->
+    <div id="azkar-motivation" style="
+        position: relative;
+        z-index: 100; 
+        background: rgba(255, 255, 255, 0.98);
+        padding: 15px; 
+        border-radius: 12px; 
+        margin-bottom: 25px;
+        text-align: center; 
+        color: #9c640c; 
+        border: 2px solid #d4af37;
+        box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+        font-weight: 500;
+    "></div>
+
+    <!-- แสงออร่าและละอองทอง (วางไว้หลังหนังสือ) -->
+    <div class="sacred-beams"></div>
+    <div class="sacred-aura"></div>
+    <div class="gold-particles"></div>
+
+    <!-- 2. ตัวเล่มตำรา (ประกาศแค่ชั้นเดียวพอครับ) -->
+    <div class="book-master" id="pdf-wrapper-fancy">
+      <div class="book-spine-gold"></div> <!-- สันหนังสือทอง -->
+      <div class="book-pages-stack"></div> <!-- ปึกกระดาษหนา -->
+      <div class="book-frame-container">
+        <iframe id="azkar-frame" src="" width="100%" height="100%" style="border:none; background: #fff;"></iframe>
+      </div>
+    </div>
+    
+  </div> <!-- ปิด container -->
+</div> <!-- ปิด page-azkar -->
+
 <!-- Knowledge -->
 <div id="page-knowledge" class="page hidden">
   <div class="header"><button class="back-btn" data-go="home"><i class="fa-solid fa-arrow-left"></i></button><h2 style="font-size:18px">ความรู้เรื่องประจำเดือน</h2><div></div></div>
@@ -602,9 +793,6 @@ try {
 
 // ====== Gemini API (สำหรับวิเคราะห์เพิ่มเติม) ======
 const GEMINI_API_KEY = "AIzaSyBy_FSkYX5ofssiP7RIrUQ2XRlU11vWSTI";
-
-// ====== ลิงก์ PDF อัซกัร (Hisn Al-Muslim) ======
-const AZKAR_PDF_URL = "https://www.islaminthailand.org/media/book/AdhkaarA5-2561.pdf";
 
 // ====== Local storage (แยกตามผู้ใช้) ======
 // คีย์ของบันทึกขึ้นกับชื่อผู้ใช้ปัจจุบัน → ข้อมูลไม่ปนข้ามบัญชี
@@ -716,18 +904,38 @@ setTimeout(()=>{
 }, 0);
 
 
-// ====== Navigation ======
-const pages = ['welcome','login','register','home','record1','record2','record3','record4','calendar','ibadah','knowledge'];
+// ====== Navigation (Updated) ======
+// 1. เพิ่ม 'azkar' เข้าไปในรายการหน้าตรงนี้
+const pages = ['welcome','login','register','home','record1','record2','record3','record4','calendar','ibadah','knowledge', 'azkar'];
+
 function go(name){
-  pages.forEach(p => document.getElementById('page-'+p).classList.add('hidden'));
+  // ปิดทุกหน้าที่อยู่ในลิสต์ pages
+  pages.forEach(p => {
+    const el = document.getElementById('page-'+p);
+    if (el) el.classList.add('hidden');
+  });
+
+  // เปิดหน้าที่ต้องการ
   const el = document.getElementById('page-'+name);
   if (el) el.classList.remove('hidden');
   window.scrollTo(0,0);
+
+  // เงื่อนไขการทำงานเฉพาะแต่ละหน้า
   if (name==='home'){ trackVisit(); maybeShowComfort(); refreshLatest(); }
   if (name==='calendar') renderCalendar();
   if (name==='ibadah') renderIbadah();
   if (name==='knowledge') renderKnowledge();
+  
+  // 2. เพิ่มเงื่อนไขสำหรับหน้าอัซกัร
+  if (name==='azkar') renderAzkarPage();
+  
+  // (เสริม) ถ้าออกจากหน้าอัซกัร ให้เคลียร์ src ของ iframe เพื่อประหยัดเน็ตและรีเซ็ตหน้า PDF
+  if (name !== 'azkar') {
+    const frame = document.getElementById('azkar-frame');
+    if (frame) frame.src = ""; 
+  }
 }
+
 document.addEventListener('click', e=>{
   const t = e.target.closest('[data-go]');
   if (t){ go(t.dataset.go); }
@@ -1048,6 +1256,45 @@ function renderIbadah(topic = 'pray', btnElement = null) {
     container.scrollTop = 0;
   }
 }
+// ====== ระบบอัซกัร (Azkar In-App System) ======
+
+function renderAzkarPage() {
+    // 1. จัดการคำคม (สุ่มใหม่)
+    const quoteBox = document.getElementById('azkar-motivation');
+    const quotes = [
+        "การรำลึกถึงอัลลอฮ์ ทำให้หัวใจสงบ (Ar-Ra'd: 28)",
+        "ทุกคำที่คุณอ่าน คือผลบุญที่สะสมไว้ในอาคีเราะฮ์",
+        "ความอดทนในการแสวงหาความรู้ คือหนทางสู่สวรรค์",
+        "เริ่มเช้าวันใหม่ด้วยอัซกัร เพื่อความจำเริญในริซกี",
+        "หัวใจที่เปี่ยมด้วยการรำลึกถึงพระองค์ คือหัวใจที่เข้มแข็ง"
+    ];
+
+    if (quoteBox) {
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        quoteBox.innerHTML = `<i class="fa-solid fa-sun" style="color:#d4af37"></i> ${randomQuote}`;
+    }
+
+    // 2. ท่าไม้ตาย Force Reflow บังคับ Flip
+    const wrapper = document.getElementById('pdf-wrapper-fancy');
+    if (wrapper) {
+        wrapper.classList.remove('page-open-anim');
+        // บังคับบราวเซอร์ให้วาดใหม่ทันที
+        void wrapper.offsetWidth; 
+        wrapper.classList.add('page-open-anim');
+    }
+
+    // 3. โหลด PDF
+    const frame = document.getElementById('azkar-frame');
+    if (frame) {
+        const pdfUrl = "https://www.islaminthailand.org/media/book/AdhkaarA5-2561.pdf#toolbar=0";
+        if (frame.src !== pdfUrl) {
+            frame.src = pdfUrl;
+        }
+    }
+}
+    
+// อย่าลืมอัปเดตฟังก์ชัน go(name) ของคุณให้เรียก renderAzkarPage() ด้วยนะครับ
+// ตัวอย่าง: if (name === 'azkar') renderAzkarPage();
 // ====== Knowledge ======
 const knowledgeDocs = [
   {icon:'fa-droplet', h:'ประจำเดือนคืออะไร', p:'ประจำเดือนคือการที่เยื่อบุโพรงมดลูกหลุดลอกออกมาเป็นเลือดทุก 21–35 วัน นาน 3–7 วัน'},
@@ -1071,26 +1318,29 @@ function renderKnowledge(){
 // ====== Init ======
 // ====== Init ======
 // ถ้ามี Firebase และยังมี session อยู่ ให้ sync แล้วเข้าหน้า home
-if (useFirebase){
-  auth.onAuthStateChanged(async u=>{
-    if (u){
-      // เก็บ name จาก Firestore เพื่อใช้เป็น namespace ของ local cache
-      try{
-        const doc = await db.collection('users').doc(u.uid).get();
-        const name = (doc.exists && doc.data().name) ? doc.data().name : (u.email||'user').split('@')[0];
-        LS.setUser({name, uid:u.uid});
-      }catch(e){ LS.setUser({name:(u.email||'user').split('@')[0], uid:u.uid}); }
-      await syncRecordsFromFirebase();
-      go('home');
-    } else if (!LS.user()) {
-      go('welcome');
-    } else {
-      go('home');
-    }
-  });
+// ====== Init (Check carefully) ======
+if (useFirebase) {
+    auth.onAuthStateChanged(async (u) => {
+        if (u) {
+            try {
+                const doc = await db.collection('users').doc(u.uid).get();
+                const name = (doc.exists && doc.data().name) ? doc.data().name : (u.email || 'user').split('@')[0];
+                LS.setUser({ name, uid: u.uid });
+            } catch (e) {
+                LS.setUser({ name: (u.email || 'user').split('@')[0], uid: u.uid });
+            }
+            await syncRecordsFromFirebase();
+            go('home');
+        } else if (!LS.user()) {
+            go('welcome');
+        } else {
+            go('home');
+        }
+    });
 } else {
-  if (LS.user()) go('home'); else go('welcome');
+    if (LS.user()) go('home'); else go('welcome');
 }
+// จบ Init
 </script>
 </body>
 </html>
