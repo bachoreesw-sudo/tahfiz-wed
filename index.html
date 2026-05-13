@@ -159,6 +159,29 @@ body.dark .warning-card h4{color:#FFD966}
 body.dark .calendar-day{color:#f0e6ff}
 body.dark .comfort-banner{background:linear-gradient(135deg,#3a2456,#2d1f4a);color:#f0e6ff}
 
+.toggle-eye {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #9c640c; /* สีน้ำตาลทองเข้ากับธีม */
+    z-index: 10;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-eye:hover {
+    color: #d4af37;
+    filter: drop-shadow(0 0 2px rgba(212, 175, 55, 0.5));
+}
+
+/* ป้องกัน input ขยายจนทับปุ่ม */
+.form-group input {
+    box-sizing: border-box;
+}
 /* Private mode */
 /* 1. สั่งเบลอ Container หลักทั้งหมดเมื่ออยู่ในโหมด Private */
 /* เลือกเบลอทุกอย่างที่เป็น Page และ Logo */
@@ -510,7 +533,15 @@ body.dark .global-logos {
   <form id="form-register">
     <div class="form-group"><label>ชื่อผู้ใช้</label><input type="text" id="reg-name" required></div>
     <div class="form-group"><label>อายุ</label><input type="number" id="reg-age" min="9" max="80" required></div>
-    <div class="form-group"><label>รหัสผ่าน6หลัก**อย่าลืมแคปหน้าจอเก็บใว้**</label><input type="password" id="reg-pass" minlength="6" required></div>
+    <div class="form-group">
+      <label>รหัสผ่าน 6 หลัก **อย่าลืมแคปหน้าจอเก็บไว้**</label>
+      <div style="position: relative;">
+        <input type="password" id="reg-pass" minlength="6" required style="width: 100%; padding-right: 40px;">
+        <span class="toggle-eye" onclick="togglePassword('reg-pass', this)">
+          <i class="fa-solid fa-eye"></i>
+        </span>
+      </div>
+    </div>
     <button type="submit" class="submit-btn">บันทึกข้อมูล</button>
   </form>
 </div>
@@ -521,7 +552,15 @@ body.dark .global-logos {
   <div class="welcome-section"><h1 class="app-title">เข้าสู่ระบบ</h1></div>
   <form id="form-login">
     <div class="form-group"><label>ชื่อผู้ใช้</label><input type="text" id="login-name" required></div>
-    <div class="form-group"><label>รหัสผ่าน</label><input type="password" id="login-pass" required></div>
+    <div class="form-group">
+      <label>รหัสผ่าน</label>
+      <div style="position: relative;">
+        <input type="password" id="login-pass" required style="width: 100%; padding-right: 40px;">
+        <span class="toggle-eye" onclick="togglePassword('login-pass', this)">
+          <i class="fa-solid fa-eye"></i>
+        </span>
+      </div>
+    </div>
     <button type="submit" class="submit-btn">เข้าสู่ระบบ</button>
   </form>
 </div>
@@ -861,8 +900,22 @@ document.getElementById('btn-private').addEventListener('click', ()=>{
 });
 
 // เรียกใช้ครั้งแรกเมื่อโหลดหน้า
+//ฟังชั่นดวงตา//
 applyPrefs();
+function togglePassword(inputId, spanElement) {
+    const passwordInput = document.getElementById(inputId);
+    const icon = spanElement.querySelector('i');
 
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = "password";
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
 // ====== Anxiety detector (ตรวจจับการเข้าบ่อย) ======
 const COMFORT_MSGS = [
   'หายใจลึก ๆ นะคะ 🌸 อัลลอฮ์ทรงอยู่ใกล้กว่าเส้นเลือดที่คอของคุณเสมอ — ทุกอย่างจะค่อย ๆ ดีขึ้น',
