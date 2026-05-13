@@ -263,6 +263,47 @@ body.dark .global-logos {
 .global-logos a:active img {
     transform: scale(0.9); /* เวลาจิ้มแล้วให้โลโก้ยุบตัวลง 10% */
 }
+.ibadah-nav {
+  display: grid; /* เปลี่ยนจาก flex เป็น grid */
+  grid-template-columns: 1fr 1fr; /* แบ่งเป็น 2 คอลัมน์เท่ากัน */
+  gap: 12px; /* ระยะห่างระหว่างปุ่ม */
+  margin-bottom: 25px;
+  max-width: 400px; /* จำกัดความกว้างไม่ให้แผ่กว้างเกินไปบนจอคอม */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ibadah-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* จัดไอคอนและข้อความให้อยู่กลางปุ่ม */
+  gap: 10px;
+  padding: 12px 10px; /* ปรับ padding เล็กน้อยเพื่อให้ลงตัว 2 คอลัมน์ */
+  background: #ffffff;
+  color: #1a5276;
+  border: 2px solid #eef2f3;
+  border-radius: 50px; 
+  font-size: 0.95rem; /* ลดขนาดฟอนต์นิดหน่อยเพื่อให้กดง่ายบนมือถือ */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+  width: 100%; /* ให้ปุ่มขยายเต็มพื้นที่คอลัมน์ */
+}
+
+/* เอฟเฟกต์เวลาเอาเมาส์ชี้ หรือ กด */
+.ibadah-btn:hover {
+  transform: translateY(-2px);
+  border-color: #1a5276;
+}
+
+/* เอฟเฟกต์เวลาปุ่มถูกเลือก (Active) */
+.ibadah-btn.active {
+  background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 15px rgba(26, 82, 118, 0.2);
+}
 </style>
 </head>
 <body>
@@ -321,7 +362,7 @@ body.dark .global-logos {
   <form id="form-register">
     <div class="form-group"><label>ชื่อผู้ใช้</label><input type="text" id="reg-name" required></div>
     <div class="form-group"><label>อายุ</label><input type="number" id="reg-age" min="9" max="80" required></div>
-    <div class="form-group"><label>รหัสผ่าน6หลัก</label><input type="password" id="reg-pass" minlength="6" required></div>
+    <div class="form-group"><label>รหัสผ่าน6หลัก**อย่าลืมแคปหน้าจอเก็บใว้**</label><input type="password" id="reg-pass" minlength="6" required></div>
     <button type="submit" class="submit-btn">บันทึกข้อมูล</button>
   </form>
 </div>
@@ -493,18 +534,42 @@ body.dark .global-logos {
 </div>
 
 <!-- Ibadah Mode -->
+<!-- Ibadah Mode -->
 <div id="page-ibadah" class="page hidden">
-  <div class="header"><button class="back-btn" data-go="home"><i class="fa-solid fa-arrow-left"></i></button><h2 style="font-size:18px">Ibadah Mode</h2><div></div></div>
-  <div class="dropdown-container">
-    <label>เลือกหัวข้อ</label>
-    <select class="dropdown" id="ibadah-topic">
-      <option value="pray">การละหมาดในช่วงมีประจำเดือน</option>
-      <option value="fast">การถือศีลอด</option>
-      <option value="quran">การอ่านอัลกุรอาน</option>
-      <option value="hajj">การประกอบพิธีฮัจญ์</option>
-    </select>
+  <!-- ส่วนหัว (Header) คงเดิมตามธีมแอปของคุณ -->
+  <div class="header">
+    <button class="back-btn" onclick="go('home')">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <h2 style="font-size:18px">Ibadah Mode</h2>
+    <div></div>
   </div>
-  <div class="fatwa-content" id="ibadah-content"></div>
+
+  <div class="container" style="padding: 20px;">
+    <!-- กลุ่มปุ่มกดเลือกหัวข้อ (ใช้ Class แบบ Modern ที่เราสร้างไว้ใน CSS) -->
+    <div class="ibadah-nav">
+      <button class="ibadah-btn active" onclick="renderIbadah('pray', this)">
+        <i class="fas fa-person-praying"></i> ละหมาด
+      </button>
+      
+      <button class="ibadah-btn" onclick="renderIbadah('fast', this)">
+        <i class="fas fa-star-and-crescent"></i> ศีลอด
+      </button>
+      
+      <button class="ibadah-btn" onclick="renderIbadah('quran', this)">
+        <i class="fas fa-book-quran"></i> กุรอาน
+      </button>
+      
+      <button class="ibadah-btn" onclick="renderIbadah('hajj', this)">
+        <i class="fas fa-kaaba"></i> ฮัจญ์
+      </button>
+    </div>
+
+    <!-- พื้นที่แสดงเนื้อหา -->
+    <div id="ibadah-content" style="min-height: 200px;">
+      <!-- JavaScript จะนำ Card เนื้อหามาใส่ตรงนี้ -->
+    </div>
+  </div>
 </div>
 
 <!-- Knowledge -->
@@ -938,31 +1003,51 @@ const ibadahDocs = {
   }
 };
 
-function renderIbadah(){
-  const k = document.getElementById('ibadah-topic').value;
-  const d = ibadahDocs[k];
-  
+// เพิ่ม parameter btnElement เพื่อรับค่าตัวปุ่มที่ถูกกด
+function renderIbadah(topic = 'pray', btnElement = null) {
+  const container = document.getElementById('ibadah-content');
+  if (!container) return;
+
+  // 1. จัดการเรื่องสีของปุ่ม (Active State)
+  if (btnElement) {
+    // ลบสีปุ่มเก่าออกทั้งหมด
+    const allBtns = document.querySelectorAll('.ibadah-btn');
+    allBtns.forEach(btn => btn.classList.remove('active'));
+    // เพิ่มสีให้ปุ่มที่เพิ่งถูกกด
+    btnElement.classList.add('active');
+  } else {
+    // กรณีโหลดหน้าครั้งแรก (ไม่ได้กดปุ่ม) ให้ปุ่มแรกเป็น Active
+    const firstBtn = document.querySelector('.ibadah-btn');
+    if (firstBtn) firstBtn.classList.add('active');
+  }
+
+  // 2. ดึงข้อมูลและแสดงผลเนื้อหา (โค้ดเดิมของคุณ)
+  const d = ibadahDocs[topic];
   if (d) {
-    document.getElementById('ibadah-content').innerHTML = `
+    container.innerHTML = `
       <div class="card" style="
         background: #fff;
         border-radius: 15px;
         padding: 25px;
         border-top: 6px solid #1a5276;
         box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-        animation: fadeIn 0.5s ease;
+        animation: fadeIn 0.4s ease-out forwards;
       ">
-        <h2 style="color: #1a5276; font-size: 1.6rem; border-bottom: 1px solid #eee; padding-bottom: 15px;">${d.h}</h2>
-        <div style="line-height: 1.8; color: #34495e; font-size: 1.1rem; text-align: justify;">${d.p}</div>
+        <h2 style="color: #1a5276; font-size: 1.6rem; border-bottom: 2px dashed #eee; padding-bottom: 15px; margin-bottom: 20px;">
+          ${d.h}
+        </h2>
+        <div style="line-height: 1.8; color: #34495e; font-size: 1.1rem; text-align: justify;">
+          ${d.p}
+        </div>
         
-        <div style="margin-top: 20px; padding: 10px; background: #fff9e6; border-left: 4px solid #f1c40f; font-size: 0.95rem;">
-          <strong>หมายเหตุจากตำรา:</strong> ข้อมูลนี้สรุปจาก Al-Mughni (Ibn Qudamah) และ Fatwa คณะกรรมการถาวรซาอุฯ (Lajnah Da'imah)
+        <div style="margin-top: 25px; padding: 15px; background: #f8f9fa; border-left: 4px solid #f1c40f; border-radius: 0 8px 8px 0; font-size: 0.95rem; color: #555;">
+          <strong><i class="fas fa-info-circle" style="color: #f1c40f;"></i> หมายเหตุจากตำรา:</strong> ข้อมูลนี้สรุปจาก Al-Mughni (Ibn Qudamah) และ Fatwa คณะกรรมการอิสลามซาอุฯ (Lajnah Da'imah)
         </div>
       </div>
     `;
+    container.scrollTop = 0;
   }
 }
-
 // ====== Knowledge ======
 const knowledgeDocs = [
   {icon:'fa-droplet', h:'ประจำเดือนคืออะไร', p:'ประจำเดือนคือการที่เยื่อบุโพรงมดลูกหลุดลอกออกมาเป็นเลือดทุก 21–35 วัน นาน 3–7 วัน'},
