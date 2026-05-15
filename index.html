@@ -23,7 +23,6 @@
   --text-dark:#2D2D2D;--text-light:#666;--white:#fff;
   --red-blood:#DC143C;--dark-red:#8B0000;--brown:#8B4513;--black:#1A1A1A;--light-pink-blood:#FFB6C1;
 }
-<style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Kanit','Prompt',sans-serif;background:linear-gradient(180deg,#FFF0F5 0%,#F5EEF8 50%,#E8DAEF 100%);min-height:100vh;color:var(--text-dark);overflow-x:hidden}
 .hidden{display:none!important}
@@ -165,7 +164,7 @@ body.dark .comfort-banner{background:linear-gradient(135deg,#3a2456,#2d1f4a);col
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-    color: #9c640c; /* สีน้ำตาลทองเข้ากับธีม */
+    color: #9c640c;
     z-index: 10;
     padding: 5px;
     display: flex;
@@ -178,31 +177,27 @@ body.dark .comfort-banner{background:linear-gradient(135deg,#3a2456,#2d1f4a);col
     filter: drop-shadow(0 0 2px rgba(212, 175, 55, 0.5));
 }
 
-/* ป้องกัน input ขยายจนทับปุ่ม */
 .form-group input {
     box-sizing: border-box;
 }
+
 /* Private mode */
-/* 1. สั่งเบลอ Container หลักทั้งหมดเมื่ออยู่ในโหมด Private */
-/* เลือกเบลอทุกอย่างที่เป็น Page และ Logo */
 body.private .page, 
 body.private .global-logos,
 body.private .latest-record-card,
 body.private #latest-info {
-  filter: blur(50px) grayscale(100%) !important; /* เพิ่มเป็น 50px และขาวดำ 100% */
-  pointer-events: none !important; /* ป้องกันการกด */
+  filter: blur(50px) grayscale(100%) !important;
+  pointer-events: none !important;
   user-select: none !important;
-  opacity: 0.6; /* ลดความโปร่งใสลงด้วยเพื่อให้มองยากขึ้นไปอีก */
+  opacity: 0.6;
   transition: filter 0.3s ease;
 }
 
-/* ป้องกันไม่ให้มีการ "คลายเบลอ" เมื่อกดค้าง (ลบอันเก่าทิ้งแล้วใช้ตัวนี้) */
 body.private .page:active, 
 body.private .page:hover {
   filter: blur(50px) grayscale(100%) !important;
 }
 
-/* เพิ่มแผ่นใสสีทึบมาปิดทับอีกชั้นหนึ่ง (Overlay) */
 body.private::after {
   content: "";
   position: fixed;
@@ -210,19 +205,18 @@ body.private::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.1); /* ม่านสีดำบางๆ */
-  z-index: 998; /* อยู่ใต้ปุ่มกดแต่ทับเนื้อหา */
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 998;
   pointer-events: none;
 }
 
-/* 3. ปรับแต่งแถบแจ้งเตือนด้านบน */
 body.private::before {
   content: "🔒 โหมดส่วนตัวทำงานอยู่";
   position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(106, 58, 222, 0.9); /* สีม่วงโปร่งแสง */
+  background: rgba(106, 58, 222, 0.9);
   color: #fff;
   padding: 8px 20px;
   border-radius: 30px;
@@ -231,37 +225,23 @@ body.private::before {
   z-index: 9999;
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   white-space: nowrap;
-  pointer-events: none; /* เพื่อให้คลิกทะลุไปกดปุ่มข้างหลังได้ */
-}
-
-/* 4. หน้ากากสีขาว/ดำ จางๆ ทับหน้าจอเพื่อให้ดูเนียนขึ้น */
-body.private::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.1); /* หรือ rgba(0,0,0,0.1) ใน Dark Mode */
-  z-index: 998;
   pointer-events: none;
 }
-/* =========================================
-  <style>
-/* ... (CSS เดิมของคุณด้านบนทั้งหมด) ... */
 
 .global-logos {
-    /* เปลี่ยนจาก fixed เป็น relative เพื่อให้มันกินพื้นที่ในหน้าเว็บจริง */
     position: relative; 
     display: flex;
-    justify-content: center; /* จัดโลโก้ให้อยู่กลางหน้า */
+    justify-content: center;
     gap: 15px;
-    z-index: 999;
-    background: rgba(255, 255, 255, 0.8); /* เพิ่มความชัดของพื้นหลัง */
-    padding: 15px 0; /* เพิ่มพื้นที่ว่างบน-ล่าง */
-    border-bottom: 1px solid rgba(0,0,0,0.1); /* เพิ่มเส้นคั่นบางๆ ให้ดูเป็นระเบียบ */
-    margin-bottom: 10px; /* ดันเนื้อหาและปุ่มอื่นๆ ลงไปข้างล่าง */
-    width: 100%; /* ให้แถบสีขาวเต็มความกว้างจอ */
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+    width: 100%;
+    margin-top: 0;      /* ให้พื้นหลังแนบชิดขอบบนสุด */
+    padding-top: 60px;  /* ดันโลโก้ลงมา 60px เพื่อหลบปุ่ม Dark Mode (ปรับความสูงตามชอบ) */
+    padding-bottom: 15px;
 }
 
 body.dark .global-logos {
@@ -270,7 +250,7 @@ body.dark .global-logos {
 }
 
 .global-logos img {
-    width: 60px; /* ปรับขนาดให้พอดีกับแถบบน */
+    width: 60px;
     height: 60px;
     border-radius: 50%;
     object-fit: cover;
@@ -278,15 +258,15 @@ body.dark .global-logos {
     transition: transform 0.1s;
 }
 
-/* เพิ่ม CSS สำหรับส่วนลิงก์ที่ครอบโลโก้ */
 .global-logos a {
     display: flex;
     text-decoration: none;
 }
 .global-logos a:active img {
-    transform: scale(0.9); /* เวลาจิ้มแล้วให้โลโก้ยุบตัวลง 10% */
+    transform: scale(0.9);
 }
-/* --- ส่วนเมนู Ibadah (Grid 2 คอลัมน์) --- */
+
+/* --- Ibadah Menu --- */
 .ibadah-nav {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -327,26 +307,17 @@ body.dark .global-logos {
   box-shadow: 0 6px 15px rgba(26, 82, 118, 0.2);
 }
 
-/* --- ส่วนหน้า Azkar 3D & PDF --- */
-
-/* 1. ตั้งค่ามิติ 3D ให้หน้า Azkar */
-/* ตั้งค่ามิติ 3D */
-/* ตั้งค่ามิติหน้าจอ */
-/* บังคับมิติ 3D ให้หน้า Azkar */
-/* 1. ตั้งค่ามิติ 3D ให้หน้า Azkar */
+/* --- Azkar Page --- */
 #page-azkar {
     perspective: 2500px !important;
-    background: #fdfaf1 !important; /* พื้นหลังสีนวลตา */
+    background: #fdfaf1 !important;
 }
 
-/* รัศมีออร่าสีทองแบบพุ่ง (Golden Sacred Glow) */
-/* --- 1. ลำแสงแฉกพุ่งออกมา (Light Beams) --- */
 .sacred-beams {
     position: absolute;
     top: 55%; left: 50%;
     transform: translate(-50%, -50%);
     width: 600px; height: 600px;
-    /* สร้างลำแสงเป็นแฉกๆ */
     background: repeating-conic-gradient(
         from 0deg,
         rgba(255, 215, 0, 0) 0deg,
@@ -363,7 +334,6 @@ body.dark .global-logos {
     to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* --- 2. ออร่าฟุ้งสว่าง (เดิม) --- */
 .sacred-aura {
     position: absolute;
     top: 55%; left: 50%;
@@ -376,7 +346,6 @@ body.dark .global-logos {
     animation: auraPulse 4s ease-in-out infinite;
 }
 
-/* --- 3. ละอองทองพุ่งกระจาย (Gold Particles) --- */
 .gold-particles {
     position: absolute;
     top: 55%; left: 50%;
@@ -411,7 +380,6 @@ body.dark .global-logos {
     50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
 }
 
-/* 3. โครงสร้างเล่มตำรา (Book Master) */
 .book-master {
     position: relative;
     width: 100%; 
@@ -422,7 +390,6 @@ body.dark .global-logos {
     transition: transform 0.5s;
 }
 
-/* 4. สันหนังสือสีทอง (Spine) */
 .book-spine-gold {
     position: absolute;
     left: -8px; 
@@ -435,7 +402,6 @@ body.dark .global-logos {
     z-index: 11;
 }
 
-/* 5. เลเยอร์ปึกกระดาษหนาๆ (The Thickness) */
 .book-pages-stack, .book-thickness-layer {
     position: absolute;
     inset: 0;
@@ -445,11 +411,10 @@ body.dark .global-logos {
         3px 0 0 #e0e0e0, 
         6px 0 0 #d0d0d0, 
         9px 0 0 #c0c0c0, 
-        20px 20px 40px rgba(0,0,0,0.2); /* เงาตกกระทบพื้น */
+        20px 20px 40px rgba(0,0,0,0.2);
     transform: translateZ(-15px);
 }
 
-/* 6. กรอบใส่เนื้อหา PDF (Front Cover) */
 .book-frame-container, .book-cover-front {
     position: absolute;
     inset: 0;
@@ -457,10 +422,9 @@ body.dark .global-logos {
     border: 1.5px solid #d4af37;
     border-radius: 5px 15px 15px 5px;
     overflow: hidden;
-    box-shadow: inset 12px 0 25px rgba(0,0,0,0.1); /* เงาร่องสันหนังสือ */
+    box-shadow: inset 12px 0 25px rgba(0,0,0,0.1);
 }
 
-/* 7. แอนิเมชั่น Flip เปิดตำราศักดิ์สิทธิ์ */
 .page-open-anim {
     animation: holyFlip 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards !important;
 }
@@ -475,6 +439,8 @@ body.dark .global-logos {
         opacity: 1; 
     }
 }
+
+/* --- Profile & Settings --- */
 .menu-item {
     width: 100%;
     display: flex;
@@ -507,7 +473,6 @@ body.dark .global-logos {
 .menu-item span { flex: 1; font-weight: 500; color: #34495e; }
 .menu-item .arrow { font-size: 12px; color: #bdc3c7; }
 
-/* ปุ่มตั้งค่าในหน้า Profile */
 .settings-list {
     display: flex;
     flex-direction: column;
@@ -558,7 +523,6 @@ body.dark .global-logos {
     font-size: 12px;
 }
 
-/* ปุ่มออกจากระบบสีแดง */
 .btn-logout-red {
     margin-top: 20px;
     background: #fff5f5;
@@ -570,7 +534,7 @@ body.dark .global-logos {
     background: #ffe3e3;
     color: #e74c3c;
 }
-/* การตกแต่งส่วนหัวหน้า Home */
+
 .header-home {
     display: flex;
     justify-content: space-between;
@@ -597,45 +561,6 @@ body.dark .global-logos {
 
 .icon-btn-settings:active { transform: scale(0.9); }
 
-/* เมนูในหน้าโปรไฟล์ */
-.settings-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.menu-item {
-    display: flex;
-    align-items: center;
-    padding: 18px;
-    background: #fff;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    width: 100%;
-}
-
-.menu-item:hover { background: #f9fbfc; }
-
-.menu-icon {
-    width: 42px;
-    height: 42px;
-    background: #f0f4f7;
-    color: #4a627a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 14px;
-    margin-right: 15px;
-    font-size: 18px;
-}
-
-.menu-item span { flex: 1; text-align: left; font-weight: 600; color: #333; }
-.menu-item .arrow { color: #ccc; font-size: 14px; }
-
-/* ปุ่มออกจากระบบ (สีแดงพิเศษ) */
 .logout-item {
     background: #fff5f5 !important;
     margin-top: 15px;
@@ -647,38 +572,25 @@ body.dark .global-logos {
 </head>
 <body>
 
-<!-- =========================================ห
-     ส่วนที่เพิ่มใหม่: HTML สำหรับ 3 โลโก้ (ใส่ Link เรียบร้อย)
-     ========================================= -->
 <div class="global-logos">
-  <!-- เปลี่ยน URL ใน href=" " เป็นลิงก์เพจที่ต้องการได้เลยครับ -->
   <a href="https://www.facebook.com/share/17m3cT7tW4/" target="_blank">
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzPz9CeFZA-YTlI7VBz8vQ0EVZEyZr7eM5Rw&s" alt="Logo 1">
   </a>
-
   <a href="https://attarkiah.ac.th/" target="_blank">
     <img src="https://attarkiah.ac.th/wp-content/uploads/2025/03/cropped-logo_att.jpg" alt="Logo 2">
   </a>
-
   <a href="https://www.facebook.com/share/1Cw1fB2ctg/" target="_blank">
     <img src="https://scontent.fbkk8-2.fna.fbcdn.net/v/t39.30808-6/696187910_122100299517312449_1965577196789858038_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=13d280&_nc_ohc=BJnHzlmQGesQ7kNvwFnOmC9&_nc_oc=AdqLDxP1P9NGqfhyhTpo6nWr0sD-mWsa5AIbRFM77dIanTsnBbW3GjbUYM72NBoVRaM&_nc_zt=23&_nc_ht=scontent.fbkk8-2.fna&_nc_gid=SBEH_qwkLYWiVBNKXA8gSA&_nc_ss=7b2a8&oh=00_Af767QUXaF-Hy8VV_EBLhtGEh_5ovgBPIdHu6PJnyoMqXA&oe=6A08A964" alt="Logo 3">
   </a>
-
   <a href="https://www.facebook.com/p/GATE-Gifted-and-Talented-education-Program-100057137453044/" target="_blank">
-    <img src="https://scontent.fhdy4-1.fna.fbcdn.net/v/t39.30808-6/700692162_122101822059312449_2825106309570565840_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_ohc=RFtPOSIJdwgQ7kNvwGWDCm5&_nc_oc=Adox8osYFYijSDlylAfpkbQ27Hsn486-HEpEBHML77qQTv6SvJ--KRvzm2oyQJWnZigGpyty48kiw8uTGKH-4Z9b&_nc_zt=23&_nc_ht=scontent.fhdy4-1.fna&_nc_gid=tu9wRZIBcVTx3LKWmsJR1w&_nc_ss=7b2a8&oh=00_Af4K7hBMXnGfAp6gEeOpaxjOslMPvkPVZszZOTf_WUxa9Q&oe=6A0B10AC" alt="Logo 3">
+    <img src="https://scontent.fhdy4-1.fna.fbcdn.net/v/t39.30808-6/700692162_122101822059312449_2825106309570565840_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_ohc=RFtPOSIJdwgQ7kNvwGWDCm5&_nc_oc=Adox8osYFYijSDlylAfpkbQ27Hsn486-HEpEBHML77qQTv6SvJ--KRvzm2oyQJWnZigGpyty48kiw8uTGKH-4Z9b&_nc_zt=23&_nc_ht=scontent.fhdy4-1.fna&_nc_gid=tu9wRZIBcVTx3LKWmsJR1w&_nc_ss=7b2a8&oh=00_Af4K7hBMXnGfAp6gEeOpaxjOslMPvkPVZszZOTf_WUxa9Q&oe=6A0B10AC" alt="Logo 4">
   </a>
 </div>
 
-<!-- โค้ดส่วนที่เหลือของคุณ... -->
-<!-- Floating top controls (visible everywhere) (โค้ดเดิมของคุณ) -->
 <div class="top-controls">
   <button id="btn-dark" title="โหมดมืด"><i class="fa-solid fa-moon"></i></button>
   <button id="btn-private" title="โหมดส่วนตัว"><i class="fa-solid fa-eye-slash"></i></button>
 </div>
-
-<!-- โค้ดส่วนอื่นๆ ของหน้าเว็บคุณใส่ต่อจากตรงนี้ได้เลยครับ -->
-
-
 
 <!-- Welcome / Auth select -->
 <div id="page-welcome" class="page">
@@ -736,10 +648,7 @@ body.dark .global-logos {
 <!-- หน้า Home -->
 <div id="page-home" class="page hidden">
     <div class="header-home">
-        <!-- โลโก้ซ้าย -->
         <div class="logo-circle"><i class="fa-solid fa-heart"></i></div>
-        
-        <!-- ปุ่มฟันเฟือง ขวาบน (กดเข้า Profile) -->
         <button class="icon-btn-settings" onclick="go('profile')">
             <i class="fa-solid fa-gear"></i>
         </button>
@@ -751,7 +660,6 @@ body.dark .global-logos {
         <h1 class="app-title">✨ AI Muslim Women Care ✨</h1>
     </div>
 
-    <!-- ส่วน Menu Grid (เหมือนเดิมของบาครี) -->
     <div class="menu-grid">
         <button class="menu-card" data-go="record1"><i class="fa-solid fa-droplet"></i><h4>บันทึกอาการ</h4></button>
         <button class="menu-card" data-go="calendar"><i class="fa-solid fa-calendar-days"></i><h4>ปฏิทินรอบเดือน</h4></button>
@@ -772,7 +680,6 @@ body.dark .global-logos {
     </div>
 
     <div class="container" style="padding: 20px;">
-        <!-- Card ผู้ใช้ -->
         <div class="user-card" style="text-align: center; background: #fff; padding: 30px; border-radius: 25px; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.03);">
             <div style="font-size: 60px; color: #4a627a; margin-bottom: 10px;">
                 <i class="fa-solid fa-circle-user"></i>
@@ -784,7 +691,6 @@ body.dark .global-logos {
         <div class="settings-list" style="display: flex; flex-direction: column; gap: 12px;">
             <p style="font-weight: bold; color: #4a627a; margin-left: 10px; margin-bottom: 5px;">บัญชีและความปลอดภัย</p>
             
-            <!-- ปุ่มเปลี่ยนรหัสผ่าน -->
             <button data-go="password" class="menu-item" style="display: flex; align-items: center; padding: 15px; background: #fff; border: none; border-radius: 18px; cursor: pointer; width: 100%; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
                 <div class="menu-icon" style="width: 40px; height: 40px; background: #f0f4f7; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: #4a627a;">
                     <i class="fa-solid fa-key"></i>
@@ -793,7 +699,6 @@ body.dark .global-logos {
                 <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 12px;"></i>
             </button>
 
-            <!-- ปุ่มแจ้งปัญหาการใช้งาน (เพิ่มใหม่ตรงนี้) -->
             <button data-go="report" class="menu-item" style="display: flex; align-items: center; padding: 15px; background: #fff; border: none; border-radius: 18px; cursor: pointer; width: 100%; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
                 <div class="menu-icon" style="width: 40px; height: 40px; background: #fff5f5; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: #e74c3c;">
                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -804,7 +709,6 @@ body.dark .global-logos {
 
             <p style="font-weight: bold; color: #4a627a; margin-left: 10px; margin-top: 10px; margin-bottom: 5px;">การแสดงผล</p>
 
-            <!-- ปุ่มเปลี่ยนธีม -->
             <button onclick="toggleDarkMode()" class="menu-item" style="display: flex; align-items: center; padding: 15px; background: #fff; border: none; border-radius: 18px; cursor: pointer; width: 100%; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
                 <div class="menu-icon" style="width: 40px; height: 40px; background: #f0f4f7; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: #4a627a;">
                     <i class="fa-solid fa-circle-half-stroke"></i>
@@ -813,7 +717,6 @@ body.dark .global-logos {
                 <i class="fa-solid fa-chevron-right" style="color: #ccc; font-size: 12px;"></i>
             </button>
 
-            <!-- ปุ่มออกจากระบบ -->
             <button id="btn-logout" class="menu-item logout-item" style="display: flex; align-items: center; padding: 15px; background: #fff5f5; border: 1px solid #ffe3e3; border-radius: 18px; cursor: pointer; width: 100%; margin-top: 10px;">
                 <div class="menu-icon" style="width: 40px; height: 40px; background: #ffe3e3; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; color: #e74c3c;">
                     <i class="fa-solid fa-power-off"></i>
@@ -1022,9 +925,7 @@ body.dark .global-logos {
 </div>
 
 <!-- Ibadah Mode -->
-<!-- Ibadah Mode -->
 <div id="page-ibadah" class="page hidden">
-  <!-- ส่วนหัว (Header) คงเดิมตามธีมแอปของคุณ -->
   <div class="header">
     <button class="back-btn" onclick="go('home')">
       <i class="fa-solid fa-arrow-left"></i>
@@ -1034,34 +935,26 @@ body.dark .global-logos {
   </div>
 
   <div class="container" style="padding: 20px;">
-    <!-- กลุ่มปุ่มกดเลือกหัวข้อ (ใช้ Class แบบ Modern ที่เราสร้างไว้ใน CSS) -->
     <div class="ibadah-nav">
       <button class="ibadah-btn active" onclick="renderIbadah('pray', this)">
         <i class="fas fa-person-praying"></i> ละหมาด
       </button>
-      
       <button class="ibadah-btn" onclick="renderIbadah('fast', this)">
         <i class="fas fa-star-and-crescent"></i> ศีลอด
       </button>
-      
       <button class="ibadah-btn" onclick="renderIbadah('quran', this)">
         <i class="fas fa-book-quran"></i> กุรอาน
       </button>
-      
       <button class="ibadah-btn" onclick="renderIbadah('hajj', this)">
         <i class="fas fa-kaaba"></i> ฮัจญ์
       </button>
     </div>
 
-    <!-- พื้นที่แสดงเนื้อหา -->
-    <div id="ibadah-content" style="min-height: 200px;">
-      <!-- JavaScript จะนำ Card เนื้อหามาใส่ตรงนี้ -->
-    </div>
+    <div id="ibadah-content" style="min-height: 200px;"></div>
   </div>
 </div>
 
 <div id="page-azkar" class="page hidden" style="overflow: visible !important;">
-  <!-- ส่วนหัว -->
   <div class="header">
     <button class="back-btn" data-go="home"><i class="fa-solid fa-arrow-left"></i></button>
     <h2 style="font-size:18px; color: #9c640c; font-weight: bold;">อัซกัร (Hisn Al-Muslim)</h2>
@@ -1070,7 +963,6 @@ body.dark .global-logos {
 
   <div class="container" style="padding: 20px; position: relative; min-height: 85vh; overflow: visible !important;">
     
-    <!-- 1. ส่วนข้อความคำคม -->
     <div id="azkar-motivation" style="
         position: relative;
         z-index: 100; 
@@ -1085,22 +977,20 @@ body.dark .global-logos {
         font-weight: 500;
     "></div>
 
-    <!-- แสงออร่าและละอองทอง (วางไว้หลังหนังสือ) -->
     <div class="sacred-beams"></div>
     <div class="sacred-aura"></div>
     <div class="gold-particles"></div>
 
-    <!-- 2. ตัวเล่มตำรา (ประกาศแค่ชั้นเดียวพอครับ) -->
     <div class="book-master" id="pdf-wrapper-fancy">
-      <div class="book-spine-gold"></div> <!-- สันหนังสือทอง -->
-      <div class="book-pages-stack"></div> <!-- ปึกกระดาษหนา -->
+      <div class="book-spine-gold"></div>
+      <div class="book-pages-stack"></div>
       <div class="book-frame-container">
         <iframe id="azkar-frame" src="" width="100%" height="100%" style="border:none; background: #fff;"></iframe>
       </div>
     </div>
     
-  </div> <!-- ปิด container -->
-</div> <!-- ปิด page-azkar -->
+  </div>
+</div> 
 
 <!-- Knowledge -->
 <div id="page-knowledge" class="page hidden">
@@ -1110,9 +1000,8 @@ body.dark .global-logos {
 
 <div class="toast" id="toast"></div>
 
-
 <script>
-// ====== Firebase config (ใส่ค่าของคุณเอง) ======
+// ====== Firebase config ======
 const firebaseConfig = {
   apiKey: "AIzaSyAOuFDb2MwzJYproQavJc3o3UCtpjFV258",
   authDomain: "tahfiz-af7b0.firebaseapp.com",
@@ -1130,11 +1019,9 @@ try {
   }
 } catch(e){ console.warn("Firebase not initialized:", e); }
 
-// ====== Gemini API (สำหรับวิเคราะห์เพิ่มเติม) ======
 const GEMINI_API_KEY = "AIzaSyBy_FSkYX5ofssiP7RIrUQ2XRlU11vWSTI";
 
-// ====== Local storage (แยกตามผู้ใช้) ======
-// คีย์ของบันทึกขึ้นกับชื่อผู้ใช้ปัจจุบัน → ข้อมูลไม่ปนข้ามบัญชี
+// ====== Local storage ======
 function curUserName(){ const u = JSON.parse(localStorage.getItem('amwc_user')||'null'); return u && u.name ? u.name : null; }
 function recKey(){ const n = curUserName(); return 'amwc_records__' + (n||'__guest'); }
 function visitKey(){ const n = curUserName(); return 'amwc_visits__' + (n||'__guest'); }
@@ -1150,86 +1037,51 @@ const LS = {
   setUsers: u => localStorage.setItem('amwc_users', JSON.stringify(u)),
 };
 
-// ====== Firebase records helpers (ผูกกับ uid ของแต่ละบัญชี) ======
-// ====== Firebase records helpers ======
-// ====== Firebase records helpers ======
+// ====== Firebase helpers ======
 async function fbLoadRecords() {
-    if (!useFirebase || !auth.currentUser) {
-        console.warn("Firebase ไม่พร้อมใช้งาน หรือยังไม่ได้ Login");
-        return null;
-    }
-
+    if (!useFirebase || !auth.currentUser) return null;
     try {
         const snap = await db.collection('records')
             .where('uid', '==', auth.currentUser.uid)
             .orderBy('date', 'desc')
             .limit(200)
             .get();
-
-        // ตรวจสอบว่ามีข้อมูลไหม
-        if (snap.empty) {
-            console.log("⚠️ ไม่พบข้อมูลบันทึกใน Firebase สำหรับ User นี้");
-            return []; // ส่งอาเรย์ว่างกลับไปเพื่อให้ LS.setRecords ทำงานได้
-        }
-
+        if (snap.empty) return [];
         const data = snap.docs.map(d => d.data());
-        console.log(`✅ ซิงค์สำเร็จ: พบ ${data.length} รายการ`);
+        console.log(`✅ Sync: ${data.length} records`);
         return data;
-
     } catch (e) {
-        // กรณี Error เรื่อง Index (Missing or insufficient permissions / Index required)
-        console.error('❌ fbLoadRecords Error:', e.message);
-        
-        // ถ้าบาครีเห็น Link ใน Console ให้กดคลิกเพื่อสร้าง Index ทันทีครับ
-        if (e.message.includes('index')) {
-            console.error('กรุณาคลิก Link ด้านบนเพื่อสร้าง Composite Index ใน Firebase Console');
-        }
+        console.error('❌ Sync Error:', e.message);
         return null;
     }
 }
 
 async function syncRecordsFromFirebase() {
-    // ป้องกันการเรียกซ้ำซ้อนเกินความจำเป็น
     if (window.isSyncing) return;
     window.isSyncing = true;
-
-    console.log("🔄 เริ่มการซิงค์ข้อมูลสำหรับ:", auth.currentUser.email);
-    
     const fb = await fbLoadRecords();
-    
     if (fb !== null) { 
         LS.setRecords(fb);
-        if (typeof renderAll === "function") {
-            renderAll(); 
-            console.log("🎨 หน้าจออัปเดตข้อมูลใหม่เรียบร้อย");
-        }
+        if (typeof refreshLatest === "function") refreshLatest(); 
     }
-    
     window.isSyncing = false;
 }
-// ====== Dark / Private mode ======
+
 // ====== Dark / Private mode ======
 function applyPrefs(){
   const dark = localStorage.getItem('amwc_dark') === '1';
   const priv = localStorage.getItem('amwc_private') === '1';
-  
-  // ใส่ Class ให้ Body เพื่อให้ CSS ทำงาน
   document.body.classList.toggle('dark', dark);
   document.body.classList.toggle('private', priv);
-  
-  // เปลี่ยนสถานะปุ่ม
   const btnDark = document.getElementById('btn-dark');
   const btnPriv = document.getElementById('btn-private');
-  
   if (btnDark) btnDark.classList.toggle('active', dark);
   if (btnPriv) {
       btnPriv.classList.toggle('active', priv);
-      // เปลี่ยนไอคอนปุ่มตามสถานะ
       btnPriv.innerHTML = priv ? '<i class="fa-solid fa-eye"></i>' : '<i class="fa-solid fa-eye-slash"></i>';
   }
 }
 
-// Event Listeners
 document.getElementById('btn-dark').addEventListener('click', ()=>{
   localStorage.setItem('amwc_dark', localStorage.getItem('amwc_dark')==='1'?'0':'1'); 
   applyPrefs();
@@ -1240,13 +1092,11 @@ document.getElementById('btn-private').addEventListener('click', ()=>{
   applyPrefs();
 });
 
-// เรียกใช้ครั้งแรกเมื่อโหลดหน้า
-//ฟังชั่นดวงตา//
 applyPrefs();
+
 function togglePassword(inputId, spanElement) {
     const passwordInput = document.getElementById(inputId);
     const icon = spanElement.querySelector('i');
-
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
         icon.classList.remove('fa-eye');
@@ -1257,7 +1107,8 @@ function togglePassword(inputId, spanElement) {
         icon.classList.add('fa-eye');
     }
 }
-// ====== Anxiety detector (ตรวจจับการเข้าบ่อย) ======
+
+// ====== Anxiety detector ======
 const COMFORT_MSGS = [
   'หายใจลึก ๆ นะคะ 🌸 อัลลอฮ์ทรงอยู่ใกล้กว่าเส้นเลือดที่คอของคุณเสมอ — ทุกอย่างจะค่อย ๆ ดีขึ้น',
   'ความกังวลคือสัญญาณว่าคุณใส่ใจตัวเอง 💜 ลองพักสายตา จิบน้ำอุ่น แล้วกล่าว "อัลฮัมดุลิลลาฮ์" สักครั้งนะคะ',
@@ -1285,11 +1136,7 @@ function maybeShowComfort(){
   }
 }
 
-// ====== ปุ่มอัซกัร / กำลังใจ ======
-document.addEventListener('DOMContentLoaded', ()=>{});
 setTimeout(()=>{
-  const az = document.getElementById('btn-azkar');
-  if (az) az.addEventListener('click', ()=> window.open(AZKAR_PDF_URL, '_blank'));
   const cf = document.getElementById('btn-comfort');
   if (cf) cf.addEventListener('click', ()=>{
     const m = COMFORT_MSGS[Math.floor(Math.random()*COMFORT_MSGS.length)];
@@ -1297,39 +1144,46 @@ setTimeout(()=>{
   });
 }, 0);
 
-
-// ====== Navigation (Updated) ======
-// 1. เพิ่ม 'azkar' เข้าไปในรายการหน้าตรงนี้
-const pages = ['welcome','login','register','home','record1','record2','record3','record4','calendar','ibadah','knowledge', 'azkar'];
+// ====== MASTER NAVIGATION FUNCTION ======
+// รวมฟังก์ชัน go ที่ซ้ำกันให้เป็นตัวเดียว เพื่อป้องกันการทับซ้อน
+const pages = ['welcome','login','register','home','record1','record2','record3','record4','calendar','ibadah','knowledge', 'azkar', 'profile', 'password', 'report'];
 
 function go(name){
-  // ปิดทุกหน้าที่อยู่ในลิสต์ pages
+  // 1. ซ่อนทุกหน้า
   pages.forEach(p => {
     const el = document.getElementById('page-'+p);
     if (el) el.classList.add('hidden');
   });
 
-  // เปิดหน้าที่ต้องการ
+  // 2. เปิดหน้าเป้าหมาย
   const el = document.getElementById('page-'+name);
-  if (el) el.classList.remove('hidden');
-  window.scrollTo(0,0);
+  if (el) {
+    el.classList.remove('hidden');
+    window.scrollTo(0,0);
+  }
 
-  // เงื่อนไขการทำงานเฉพาะแต่ละหน้า
-  if (name==='home'){ trackVisit(); maybeShowComfort(); refreshLatest(); }
+  // 3. คำสั่งพิเศษสำหรับแต่ละหน้า (เป็นจุดสำคัญที่แก้บั๊กจอขาว)
+  if (name==='home'){ 
+    if(typeof trackVisit === 'function') trackVisit(); 
+    if(typeof maybeShowComfort === 'function') maybeShowComfort(); 
+    if(typeof refreshLatest === 'function') refreshLatest(); 
+  }
   if (name==='calendar') renderCalendar();
   if (name==='ibadah') renderIbadah();
-  if (name==='knowledge') renderKnowledge();
-  
-  // 2. เพิ่มเงื่อนไขสำหรับหน้าอัซกัร
-  if (name==='azkar') renderAzkarPage();
-  
-  // (เสริม) ถ้าออกจากหน้าอัซกัร ให้เคลียร์ src ของ iframe เพื่อประหยัดเน็ตและรีเซ็ตหน้า PDF
-  if (name !== 'azkar') {
-    const frame = document.getElementById('azkar-frame');
-    if (frame) frame.src = ""; 
+  if (name==='knowledge') renderKnowledge(); // <--- แก้บั๊กหน้าความรู้ขาว
+  if (name==='azkar') renderAzkarPage(); // <--- แก้บั๊กหน้าอัซกัรขาว
+  if (name==='profile') updateProfileInfo(); // <--- แก้บั๊กหน้าโปรไฟล์ไม่โหลดข้อมูล
+
+  // 4. จัดการ Iframe ของ Azkar (ให้โหลดใหม่ทุกครั้งที่เข้า)
+  const frame = document.getElementById('azkar-frame');
+  if (frame) {
+    if (name !== 'azkar') {
+      frame.src = ""; 
+    }
   }
 }
 
+// ผูก Event Listener สำหรับปุ่มที่มี data-go
 document.addEventListener('click', e=>{
   const t = e.target.closest('[data-go]');
   if (t){ go(t.dataset.go); }
@@ -1338,13 +1192,15 @@ document.addEventListener('click', e=>{
 // ====== Toast ======
 function toast(msg){
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), 2200);
+  if (t) {
+    t.textContent = msg; 
+    t.classList.add('show');
+    clearTimeout(t._t); 
+    t._t = setTimeout(()=>t.classList.remove('show'), 2200);
+  }
 }
 
 // ====== Auth ======
-
-// 1. ฟังก์ชันสมัครสมาชิก
 const formRegister = document.getElementById('form-register');
 if (formRegister) {
     formRegister.addEventListener('submit', async e => {
@@ -1352,14 +1208,11 @@ if (formRegister) {
         const name = document.getElementById('reg-name').value.trim();
         const age = document.getElementById('reg-age').value;
         const pass = document.getElementById('reg-pass').value;
-        
         if (!name || !pass) return;
         const email = name.toLowerCase().replace(/\s+/g, '') + '@muslimcare.app';
-        
         try {
             if (useFirebase) {
                 const cred = await auth.createUserWithEmailAndPassword(email, pass);
-                // ใช้การอ้างอิง db แบบที่รองรับทั้ง Firestore หรือ Realtime (ตามที่บาครีเซตไว้)
                 await db.collection('users').doc(cred.user.uid).set({ name, age, createdAt: Date.now() });
             } else {
                 const users = LS.users();
@@ -1374,7 +1227,6 @@ if (formRegister) {
     });
 }
 
-// 2. ฟังก์ชันเข้าสู่ระบบ
 const formLogin = document.getElementById('form-login');
 if (formLogin) {
     formLogin.addEventListener('submit', async e => {
@@ -1382,16 +1234,12 @@ if (formLogin) {
         const name = document.getElementById('login-name').value.trim();
         const pass = document.getElementById('login-pass').value;
         const email = name.toLowerCase().replace(/\s+/g, '') + '@muslimcare.app';
-        
         try {
             if (useFirebase) {
                 await auth.signInWithEmailAndPassword(email, pass);
             } else {
                 const users = LS.users();
-                if (!users[name] || users[name].pass !== pass) { 
-                    toast('ชื่อหรือรหัสผ่านไม่ถูกต้อง'); 
-                    return; 
-                }
+                if (!users[name] || users[name].pass !== pass) { toast('ชื่อหรือรหัสผ่านไม่ถูกต้อง'); return; }
             }
             LS.setUser({ name });
             toast('ยินดีต้อนรับ ' + name);
@@ -1400,25 +1248,17 @@ if (formLogin) {
     });
 }
 
-// 3. ฟังก์ชันออกจากระบบ (จุดที่เกิด Error บรรทัด 1248)
-// แก้โดยการสร้างฟังก์ชันแยกไว้ แล้วค่อยสั่งงานเมื่อเจอปุ่ม
 async function handleLogout() {
     if (useFirebase) try { await auth.signOut(); } catch (e) {}
-    try { 
-        localStorage.removeItem(recKey()); 
-        localStorage.removeItem(visitKey()); 
-    } catch (e) {}
+    try { localStorage.removeItem(recKey()); localStorage.removeItem(visitKey()); } catch (e) {}
     LS.clearUser();
     go('welcome');
 }
 
-// ตรวจสอบปุ่มออกจากระบบ (กัน Error null)
 const btnLogout = document.getElementById('btn-logout');
-if (btnLogout) {
-    btnLogout.addEventListener('click', handleLogout);
-}
+if (btnLogout) btnLogout.addEventListener('click', handleLogout);
 
-// ====== Record Step 1 ======
+// ====== Record Logic ======
 let recState = { color:null, type:null, days:1 };
 
 document.getElementById('color-grid').addEventListener('click', e=>{
@@ -1444,7 +1284,6 @@ document.getElementById('btn-to-step2').addEventListener('click', ()=>{
   go('record2');
 });
 
-// ====== Analysis logic ======
 function analyze(){
   let conf = 50;
   if (['แดงสด','แดงเข้ม'].includes(recState.color)) conf += 25;
@@ -1462,44 +1301,20 @@ function analyze(){
   document.getElementById('confidence').textContent = conf+'%';
   setTimeout(()=> document.getElementById('bar-fill').style.width = conf+'%', 50);
   document.getElementById('analysis-title').textContent = recState.isPeriod ? 'มีแนวโน้มเป็นประจำเดือน (Haid)' : 'อาจไม่ใช่ประจำเดือน (Istihadah)';
+  document.getElementById('advice-text').textContent = recState.isPeriod ? 'จากข้อมูล ลักษณะเลือดและระยะเวลาเข้าข่ายประจำเดือน (Haid) ควรงดละหมาดและถือศีลอดในช่วงนี้ และเริ่มชดเชยหลังหมด' : 'อาการอาจเป็นเลือดผิดปกติ (Istihadah) ซึ่งไม่ห้ามอิบาดะฮ์ ควรทำความสะอาดและละหมาดตามปกติ';
 
-  document.getElementById('advice-text').textContent = recState.isPeriod
-    ? 'จากข้อมูล ลักษณะเลือดและระยะเวลาเข้าข่ายประจำเดือน (Haid) ควรงดละหมาดและถือศีลอดในช่วงนี้ และเริ่มชดเชยหลังหมด'
-    : 'อาการอาจเป็นเลือดผิดปกติ (Istihadah) ซึ่งไม่ห้ามอิบาดะฮ์ ควรทำความสะอาดและละหมาดตามปกติ';
+  document.getElementById('diag-summary').textContent = recState.isPeriod ? 'ระบบประเมินว่าเป็น Haid (ประจำเดือน) ด้วยความมั่นใจ '+conf+'%' : 'ระบบประเมินว่าน่าจะเป็น Istihadah (เลือดผิดปกติ) ความมั่นใจ '+(100-conf)+'%';
+  document.getElementById('diag-detail').textContent = 'สี: '+recState.color+' | ลักษณะ: '+recState.type+' | ระยะเวลา: '+recState.days+' วัน';
+  document.getElementById('diag-medical').textContent = recState.days > 10 ? 'ระยะเวลายาวเกิน 10 วัน ควรพบแพทย์เพื่อตรวจเพิ่มเติม' : 'อาการอยู่ในเกณฑ์ปกติ ดูแลสุขอนามัยและพักผ่อนให้เพียงพอ';
 
-  // Step 3
-  document.getElementById('diag-summary').textContent = recState.isPeriod
-    ? 'ระบบประเมินว่าเป็น Haid (ประจำเดือน) ด้วยความมั่นใจ '+conf+'%'
-    : 'ระบบประเมินว่าน่าจะเป็น Istihadah (เลือดผิดปกติ) ความมั่นใจ '+(100-conf)+'%';
-  document.getElementById('diag-detail').textContent =
-    'สี: '+recState.color+' | ลักษณะ: '+recState.type+' | ระยะเวลา: '+recState.days+' วัน';
-  document.getElementById('diag-medical').textContent = recState.days > 10
-    ? 'ระยะเวลายาวเกิน 10 วัน ควรพบแพทย์เพื่อตรวจเพิ่มเติม'
-    : 'อาการอยู่ในเกณฑ์ปกติ ดูแลสุขอนามัยและพักผ่อนให้เพียงพอ';
-
-  // Step 4
-  document.getElementById('ibadah-pray').textContent = recState.isPeriod
-    ? 'งดละหมาดในช่วงมีประจำเดือน ไม่ต้องชดเชยหลังหมด'
-    : 'ละหมาดได้ตามปกติ พร้อมทำวุฎูอ์ใหม่ทุกครั้งที่จะละหมาด';
-  document.getElementById('ibadah-fast').textContent = recState.isPeriod
-    ? 'งดถือศีลอด และต้องชดเชย (Qadha) ภายหลัง'
-    : 'ถือศีลอดได้ตามปกติ';
-  document.getElementById('ibadah-quran').textContent = recState.isPeriod
-    ? 'ตามมัซฮับส่วนใหญ่ ควรงดสัมผัสและอ่านอัลกุรอานโดยตรง สามารถฟังหรือกล่าวซิกร์ได้'
-    : 'อ่านและสัมผัสอัลกุรอานได้ตามปกติ';
+  document.getElementById('ibadah-pray').textContent = recState.isPeriod ? 'งดละหมาดในช่วงมีประจำเดือน ไม่ต้องชดเชยหลังหมด' : 'ละหมาดได้ตามปกติ พร้อมทำวุฎูอ์ใหม่ทุกครั้งที่จะละหมาด';
+  document.getElementById('ibadah-fast').textContent = recState.isPeriod ? 'งดถือศีลอด และต้องชดเชย (Qadha) ภายหลัง' : 'ถือศีลอดได้ตามปกติ';
+  document.getElementById('ibadah-quran').textContent = recState.isPeriod ? 'ตามมัซฮับส่วนใหญ่ ควรงดสัมผัสและอ่านอัลกุรอานโดยตรง สามารถฟังหรือกล่าวซิกร์ได้' : 'อ่านและสัมผัสอัลกุรอานได้ตามปกติ';
 }
 
 document.getElementById('btn-to-step3').addEventListener('click', async ()=>{
-  const rec = {
-    ...recState,
-    date: new Date().toISOString(),
-    user: (LS.user()||{}).name || 'guest'
-  };
-  try {
-    if (useFirebase && auth.currentUser){
-      await db.collection('records').add({...rec, uid: auth.currentUser.uid});
-    }
-  } catch(e){ console.warn(e); }
+  const rec = { ...recState, date: new Date().toISOString(), user: (LS.user()||{}).name || 'guest' };
+  try { if (useFirebase && auth.currentUser) await db.collection('records').add({...rec, uid: auth.currentUser.uid}); } catch(e){}
   LS.addRecord(rec);
   go('record3');
 });
@@ -1512,16 +1327,14 @@ async function refreshLatest(){
   const info = document.getElementById('latest-info');
   const btn = document.getElementById('btn-view-latest');
   if (!rs.length){
-    info.innerHTML = '<p class="no-record"><i class="fa-regular fa-folder-open"></i><br>ยังไม่มีข้อมูล</p>';
-    btn.style.display = 'none';
+    if(info) info.innerHTML = '<p class="no-record"><i class="fa-regular fa-folder-open"></i><br>ยังไม่มีข้อมูล</p>';
+    if(btn) btn.style.display = 'none';
     return;
   }
   const r = rs[0];
   const d = new Date(r.date);
-  info.innerHTML = '<div class="latest-date">'+d.toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'})+'</div>'+
-    '<p style="color:var(--text-light);font-size:13px">'+(r.isPeriod?'Haid':'Istihadah')+' • '+r.days+' วัน • '+r.color+'</p>';
-  btn.style.display = '';
-  btn.onclick = ()=>{ recState = r; analyze(); go('record3'); };
+  if(info) info.innerHTML = '<div class="latest-date">'+d.toLocaleDateString('th-TH',{day:'numeric',month:'long',year:'numeric'})+'</div><p style="color:var(--text-light);font-size:13px">'+(r.isPeriod?'Haid':'Istihadah')+' • '+r.days+' วัน • '+r.color+'</p>';
+  if(btn) { btn.style.display = ''; btn.onclick = ()=>{ recState = r; analyze(); go('record3'); }; }
 }
 
 // ====== Calendar ======
@@ -1537,7 +1350,6 @@ async function renderCalendar(){
   const last = new Date(calDate.getFullYear(), calDate.getMonth()+1, 0);
   for (let i=0;i<first.getDay();i++){ grid.appendChild(document.createElement('div')); }
   const today = new Date();
-  // mark from records
   const rs = LS.records();
   const periodDays = new Set();
   rs.forEach(r=>{
@@ -1564,8 +1376,7 @@ document.getElementById('cal-next').addEventListener('click', ()=>{ calDate.setM
 const ibadahDocs = {
   pray: {
     h: '1. การละหมาด: วิถีแห่งการผ่อนปรนและตัวบทที่ชัดแจ้ง',
-    p: `
-    <strong>● ตัวบทฮาดิษ (Evidence):</strong> <br>
+    p: `<strong>● ตัวบทฮาดิษ (Evidence):</strong> <br>
     ท่านนบี ﷺ กล่าวแก่ท่านหญิงฟาฏิมะฮ์ บินติ อบีหุบัยช์ว่า: <br>
     <p style="color: #1a5276; font-style: italic; background: #eef2f3; padding: 10px; border-radius: 5px;">
     "فَإِذَا أَقْبَلَتِ الْحَيْضَةُ فَدَعِي الصَّلاةَ" <br>
@@ -1578,14 +1389,12 @@ const ibadahDocs = {
       <li><strong>ทำไมไม่ต้องชดเชย?:</strong> ท่านหญิงอาอิชะฮ์ (ร.ด.) ตอบคำถามนี้ว่า <em>"นี่คือสิ่งที่เกิดขึ้นกับเรา และเราถูกสั่งให้ชดเชยศีลอด แต่ไม่ถูกสั่งให้ชดเชยละหมาด"</em> (Muslim) 
       <br><strong>เหตุผลเชิงตรรกะ:</strong> มนุษย์ต้องละหมาด 1,825 เวลาต่อปี หากต้องชดเชยประจำเดือนทุกเดือน เดือนละ 35 เวลา จะเกิดสภาวะ <strong>Al-Mashaqqah (ความยากลำบากยิ่ง)</strong> ซึ่งขัดกับหลักการศาสนาที่ว่า "ศาสนานั้นคือความง่าย"</li>
     </ul>
-    
     <strong>● กรณีศึกษาที่คนมักพลาด:</strong> 
     หากประจำเดือนหมดในช่วงเวลา <strong>"อัศรี"</strong> นักวิชาการส่วนใหญ่ (มัซฮับชาฟิอี/ฮัมบาลี) เห็นว่าต้องละหมาดซุฮรีควบด้วย เพราะเป็นเวลาที่รวมกันได้ในยามคับขัน`
   },
   fast: {
     h: '2. การถือศีลอด: ความบริสุทธิ์ของวิญญาณและวินัยแห่งการชดเชย',
-    p: `
-    <strong>● ตัวบทฮาดิษ (Evidence):</strong> <br>
+    p: `<strong>● ตัวบทฮาดิษ (Evidence):</strong> <br>
     มีมติเอกฉันท์ (Ijma') จากฮาดิษที่ว่า: <br>
     <p style="color: #1a5276; font-style: italic; background: #eef2f3; padding: 10px; border-radius: 5px;">
     "أَلَيْسَ إِذَا حَاضَتْ لَمْ تُصَلِّ وَلَمْ تَصُمْ" <br>
@@ -1600,8 +1409,7 @@ const ibadahDocs = {
   },
   quran: {
     h: '3. การอ่านกุรอาน: ข้อถกเถียงระหว่าง "ความศักดิ์สิทธิ์" กับ "การเรียนรู้"',
-    p: `
-    <strong>● ตัวบทอ้างอิง (Reference):</strong> <br>
+    p: `<strong>● ตัวบทอ้างอิง (Reference):</strong> <br>
     อัลลอฮ์ทรงตรัสในซูเราะฮ์ อัล-วากิอะฮ์ อายะฮ์ที่ 79: <br>
     <p style="color: #1a5276; font-style: italic; background: #eef2f3; padding: 10px; border-radius: 5px;">
     "لا يَمَسُّهُ إِلا الْمُطَهَّرُونَ" <br>
@@ -1616,8 +1424,7 @@ const ibadahDocs = {
   },
   hajj: {
     h: '4. การประกอบพิธีฮัจญ์: บททดสอบความอดทนและทางออกในภาวะวิกฤต',
-    p: `
-    <strong>● ตัวบทฮาดิษ (Evidence):</strong> <br>
+    p: `<strong>● ตัวบทฮาดิษ (Evidence):</strong> <br>
     ท่านนบี ﷺ กล่าวแก่ท่านหญิงอาอิชะฮ์ขณะที่นางร้องไห้เพราะมีประจำเดือนระหว่างฮัจญ์: <br>
     <p style="color: #1a5276; font-style: italic; background: #eef2f3; padding: 10px; border-radius: 5px;">
     "افْعَلِي مَا يَفْعَلُ الْحَاجُّ غَيْرَ أَنْ لا تَطُوفِي بِالْبَيْتِ حَتَّى تَطْهُرِي" <br>
@@ -1631,25 +1438,17 @@ const ibadahDocs = {
   }
 };
 
-// เพิ่ม parameter btnElement เพื่อรับค่าตัวปุ่มที่ถูกกด
 function renderIbadah(topic = 'pray', btnElement = null) {
   const container = document.getElementById('ibadah-content');
   if (!container) return;
-
-  // 1. จัดการเรื่องสีของปุ่ม (Active State)
   if (btnElement) {
-    // ลบสีปุ่มเก่าออกทั้งหมด
     const allBtns = document.querySelectorAll('.ibadah-btn');
     allBtns.forEach(btn => btn.classList.remove('active'));
-    // เพิ่มสีให้ปุ่มที่เพิ่งถูกกด
     btnElement.classList.add('active');
   } else {
-    // กรณีโหลดหน้าครั้งแรก (ไม่ได้กดปุ่ม) ให้ปุ่มแรกเป็น Active
     const firstBtn = document.querySelector('.ibadah-btn');
     if (firstBtn) firstBtn.classList.add('active');
   }
-
-  // 2. ดึงข้อมูลและแสดงผลเนื้อหา (โค้ดเดิมของคุณ)
   const d = ibadahDocs[topic];
   if (d) {
     container.innerHTML = `
@@ -1667,7 +1466,6 @@ function renderIbadah(topic = 'pray', btnElement = null) {
         <div style="line-height: 1.8; color: #34495e; font-size: 1.1rem; text-align: justify;">
           ${d.p}
         </div>
-        
         <div style="margin-top: 25px; padding: 15px; background: #f8f9fa; border-left: 4px solid #f1c40f; border-radius: 0 8px 8px 0; font-size: 0.95rem; color: #555;">
           <strong><i class="fas fa-info-circle" style="color: #f1c40f;"></i> หมายเหตุจากตำรา:</strong> ข้อมูลนี้สรุปจาก Al-Mughni (Ibn Qudamah) และ Fatwa คณะกรรมการอิสลามซาอุฯ (Lajnah Da'imah)
         </div>
@@ -1676,10 +1474,9 @@ function renderIbadah(topic = 'pray', btnElement = null) {
     container.scrollTop = 0;
   }
 }
-// ====== ระบบอัซกัร (Azkar In-App System) ======
 
+// ====== Azkar System ======
 function renderAzkarPage() {
-    // 1. จัดการคำคม (สุ่มใหม่)
     const quoteBox = document.getElementById('azkar-motivation');
     const quotes = [
         "การรำลึกถึงอัลลอฮ์ ทำให้หัวใจสงบ (Ar-Ra'd: 28)",
@@ -1694,28 +1491,21 @@ function renderAzkarPage() {
         quoteBox.innerHTML = `<i class="fa-solid fa-sun" style="color:#d4af37"></i> ${randomQuote}`;
     }
 
-    // 2. ท่าไม้ตาย Force Reflow บังคับ Flip
     const wrapper = document.getElementById('pdf-wrapper-fancy');
     if (wrapper) {
         wrapper.classList.remove('page-open-anim');
-        // บังคับบราวเซอร์ให้วาดใหม่ทันที
         void wrapper.offsetWidth; 
         wrapper.classList.add('page-open-anim');
     }
 
-    // 3. โหลด PDF
     const frame = document.getElementById('azkar-frame');
     if (frame) {
         const pdfUrl = "https://www.islaminthailand.org/media/book/AdhkaarA5-2561.pdf#toolbar=0";
-        if (frame.src !== pdfUrl) {
-            frame.src = pdfUrl;
-        }
+        frame.src = "https://docs.google.com/viewer?url=" + encodeURIComponent(pdfUrl) + "&embedded=true";
     }
 }
     
-// อย่าลืมอัปเดตฟังก์ชัน go(name) ของคุณให้เรียก renderAzkarPage() ด้วยนะครับ
-// ตัวอย่าง: if (name === 'azkar') renderAzkarPage();
-// ====== Knowledge ======
+// ====== Knowledge System ======
 const knowledgeDocs = [
   {icon:'fa-droplet', h:'ประจำเดือนคืออะไร', p:'ประจำเดือนคือการที่เยื่อบุโพรงมดลูกหลุดลอกออกมาเป็นเลือดทุก 21–35 วัน นาน 3–7 วัน'},
   {icon:'fa-heart-pulse', h:'อาการก่อนมีประจำเดือน (PMS)', p:'อารมณ์แปรปรวน เจ็บเต้านม ปวดท้องน้อย อ่อนเพลีย — เป็นเรื่องปกติ ดูแลด้วยการพักผ่อน'},
@@ -1724,6 +1514,7 @@ const knowledgeDocs = [
 ];
 function renderKnowledge(){
   const c = document.getElementById('knowledge-list');
+  if(!c) return;
   c.innerHTML = knowledgeDocs.map((d,i)=>(
     '<div class="knowledge-card" data-k="'+i+'"><h4><i class="fa-solid '+d.icon+'"></i>'+d.h+'</h4><p>'+d.p+'</p>'+
     '<div class="knowledge-content" id="kc-'+i+'"><h5>รายละเอียด</h5><p>'+d.p+'</p></div></div>'
@@ -1734,147 +1525,8 @@ function renderKnowledge(){
     });
   });
 }
-// ====== 1. ฟังก์ชันสลับหน้า (Navigation) ======
-// ==========================================
-// 1. ระบบจัดการหน้าจอ (Navigation System)
-// ==========================================
-function go(pageId) {
-    // ซ่อนทุกหน้า
-    document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-    
-    // แสดงหน้าที่ต้องการ
-    const target = document.getElementById('page-' + pageId);
-    if (target) {
-        target.classList.remove('hidden');
-        window.scrollTo(0, 0);
-        
-        // ถ้าเข้าหน้าโปรไฟล์ ให้ดึงข้อมูลมาแสดง
-        if (pageId === 'profile') {
-            updateProfileInfo();
-        }
-    } else {
-        console.warn("ไม่พบหน้าไอดี: page-" + pageId);
-    }
-}
 
-// ==========================================
-// 2. ระบบดึงข้อมูลผู้ใช้ (Firestore v8)
-// ==========================================
-async function updateProfileInfo() {
-    const nameEl = document.getElementById('profile-name');
-    const ageEl = document.getElementById('profile-age');
-    
-    if (!auth.currentUser) return;
-
-    try {
-        // ดึงข้อมูลจากคอลเลกชัน users โดยใช้ UID ของคนที่ล็อกอินอยู่
-        const userDoc = await db.collection('users').doc(auth.currentUser.uid).get();
-        
-        if (userDoc.exists) {
-            const data = userDoc.data();
-            console.log("ข้อมูลที่ดึงได้จาก Firebase:", data); // ตรวจสอบใน Console ว่ามีคำว่า age ไหม
-
-            // แสดงชื่อ
-            if (nameEl) nameEl.innerText = data.name || "ผู้ใช้งาน";
-            
-            // แสดงอายุ (ตรวจสอบว่าใน Firebase ใช้ชื่อ field ว่า age หรือ Age)
-            if (ageEl) {
-                if (data.age) {
-                    ageEl.innerText = `อายุ: ${data.age} ปี`;
-                } else {
-                    ageEl.innerText = "อายุ: ไม่ระบุ";
-                    console.warn("ไม่พบ Field 'age' ในเอกสารของผู้ใช้นี้");
-                }
-            }
-            
-            // บันทึกลง Local Storage เผื่อไว้ใช้ตอน Offline
-            LS.setUser({ name: data.name, age: data.age });
-            
-        } else {
-            console.log("ไม่พบข้อมูลผู้ใช้ในระบบ (Document not found)");
-            if (ageEl) ageEl.innerText = "ไม่มีข้อมูลโปรไฟล์";
-        }
-    } catch (error) {
-        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
-    }
-}
-
-// ==========================================
-// 3. ระบบออกจากระบบ (Logout)
-// ==========================================
-async function handleLogout() {
-    if (confirm('ยืนยันการออกจากระบบ?')) {
-        try {
-            if (useFirebase) await auth.signOut();
-            
-            // ล้างข้อมูลส่วนตัวในเครื่อง
-            localStorage.removeItem(recKey());
-            localStorage.removeItem(visitKey());
-            LS.clearUser();
-            
-            toast('ออกจากระบบเรียบร้อย');
-            go('welcome'); // กลับไปหน้า Welcome
-        } catch (e) {
-            console.error("Logout error:", e);
-            toast('เกิดข้อผิดพลาด');
-        }
-    }
-}
-
-// ==========================================
-// 4. การจัดการ Event และการเริ่มต้น (Initialization)
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // ตั้งค่าปุ่มที่มี data-go ทุกปุ่ม
-    document.querySelectorAll('[data-go]').forEach(btn => {
-        btn.onclick = (e) => {
-            e.preventDefault();
-            const target = btn.getAttribute('data-go');
-            go(target);
-        };
-    });
-
-    // ตรวจสอบปุ่ม Logout
-    const logoutBtn = document.getElementById('btn-logout');
-    if (logoutBtn) {
-        logoutBtn.onclick = handleLogout;
-    }
-
-    // ตรวจสอบสถานะการ Login ทันที
-    if (useFirebase) {
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                console.log("Logged in as:", user.email);
-                // ดึงข้อมูลบันทึกจาก Firebase มาเก็บในเครื่อง
-                syncRecordsFromFirebase();
-            } else {
-                console.log("Status: Guest");
-            }
-        });
-    }
-});
-
-// ฟังก์ชันแจ้งเตือนแบบง่าย (Toast)
-function toast(msg) {
-    const box = document.createElement('div');
-    box.style = "position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); color:white; padding:10px 25px; border-radius:25px; z-index:9999; font-size:14px;";
-    box.innerText = msg;
-    document.body.appendChild(box);
-    setTimeout(() => box.remove(), 2500);
-}
-// ====== ฟังก์ชันควบคุมหน้าจอ (Navigation) ======
-function go(pageId) {
-    document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-    const target = document.getElementById('page-' + pageId);
-    if (target) {
-        target.classList.remove('hidden');
-        window.scrollTo(0, 0);
-        if (pageId === 'profile') updateProfileInfo();
-    }
-}
-
-// ====== ฟังก์ชันดึงข้อมูลโปรไฟล์ ======
+// ====== Profile Info ======
 async function updateProfileInfo() {
     const nameEl = document.getElementById('profile-name');
     const ageEl = document.getElementById('profile-age');
@@ -1898,83 +1550,7 @@ async function updateProfileInfo() {
     }
 }
 
-// ====== ระบบจัดการ Event (ทำงานเมื่อโหลดหน้าเสร็จ) ======
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. ปุ่มสลับหน้า (data-go)
-    document.querySelectorAll('[data-go]').forEach(btn => {
-        btn.onclick = (e) => {
-            e.preventDefault();
-            go(btn.getAttribute('data-go'));
-        };
-    });
-
-    // 2. ปุ่มออกจากระบบ
-    const logoutBtn = document.getElementById('btn-logout');
-    if (logoutBtn) {
-        logoutBtn.onclick = handleLogout;
-    }
-
-    // 3. ระบบยืนยันเปลี่ยนรหัสผ่าน (แก้โจทย์ของบาครี)
-    const btnConfirmPass = document.getElementById('btn-confirm-password');
-    if (btnConfirmPass) {
-        btnConfirmPass.onclick = async () => {
-            const newPass = document.getElementById('new-pass').value;
-            const confirmPass = document.getElementById('confirm-pass').value;
-
-            if (newPass.length < 6) {
-                toast('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร');
-                return;
-            }
-            if (newPass !== confirmPass) {
-                toast('รหัสผ่านไม่ตรงกัน');
-                return;
-            }
-
-            if (useFirebase && auth.currentUser) {
-                try {
-                    await auth.currentUser.updatePassword(newPass);
-                    toast('เปลี่ยนรหัสผ่านสำเร็จแล้ว!');
-                    document.getElementById('new-pass').value = '';
-                    document.getElementById('confirm-pass').value = '';
-                    go('profile');
-                } catch (error) {
-                    if (error.code === 'auth/requires-recent-login') {
-                        toast('กรุณาออกจากระบบและเข้าสู่ระบบใหม่อีกครั้งเพื่อเปลี่ยนรหัส');
-                    } else {
-                        toast('ผิดพลาด: ' + error.message);
-                    }
-                }
-            }
-        };
-    }
-
-    // 4. ตรวจสอบสถานะการ Login
-    if (useFirebase) {
-        auth.onAuthStateChanged(user => {
-            if (user) syncRecordsFromFirebase();
-        });
-    }
-});
-
-// ====== ฟังก์ชันเสริมอื่นๆ ======
-async function handleLogout() {
-    if (confirm('ยืนยันการออกจากระบบ?')) {
-        if (useFirebase) await auth.signOut();
-        LS.clearUser();
-        toast('ออกจากระบบแล้ว');
-        go('welcome');
-    }
-}
-
-function toast(msg) {
-    const box = document.createElement('div');
-    box.style = "position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.8); color:white; padding:10px 25px; border-radius:25px; z-index:9999; font-size:14px;";
-    box.innerText = msg;
-    document.body.appendChild(box);
-    setTimeout(() => box.remove(), 2500);
-}
-// ฟังก์ชันส่งรายงานไป Discord
+// ====== Report to Discord ======
 async function sendToDiscord() {
     const subject = document.getElementById('report-subject').value;
     const detail = document.getElementById('report-detail').value;
@@ -1984,14 +1560,12 @@ async function sendToDiscord() {
         toast("กรุณากรอกข้อมูลให้ครบถ้วน");
         return;
     }
-
-    // URL Webhook จาก Discord ของบาครี
     const webhookURL = "https://discord.com/api/webhooks/1504345307276906516/xN4OAcMglMduKcBur26ht08eywFwqgq0q53MbHCkyaalIC2-35hZ9POGksj0Upoznd7f";
 
     const payload = {
         embeds: [{
             title: "🚨 มีรายงานปัญหาใหม่!",
-            color: 15548997, // สีแดง
+            color: 15548997,
             fields: [
                 { name: "หัวข้อ", value: subject, inline: false },
                 { name: "รายละเอียด", value: detail, inline: false },
@@ -2010,8 +1584,8 @@ async function sendToDiscord() {
 
         if (response.ok) {
             toast("ส่งรายงานสำเร็จ");
-            document.getElementById('report-success').classList.remove('hidden'); // โชว์ลิ้งค์ Discord
-            document.getElementById('btn-send-report').disabled = true; // ป้องกันกดซ้ำ
+            document.getElementById('report-success').classList.remove('hidden'); 
+            document.getElementById('btn-send-report').disabled = true; 
             document.getElementById('btn-send-report').style.background = "#ccc";
         } else {
             toast("เกิดข้อผิดพลาดในการส่ง");
@@ -2022,38 +1596,67 @@ async function sendToDiscord() {
     }
 }
 
-// ผูก Event กับปุ่ม
+// ====== Initialization & Event Listeners ======
 document.addEventListener('DOMContentLoaded', () => {
+    
+    // Setup data-go buttons
+    document.querySelectorAll('[data-go]').forEach(btn => {
+        btn.onclick = (e) => {
+            e.preventDefault();
+            go(btn.getAttribute('data-go'));
+        };
+    });
+
+    // Password change logic
+    const btnConfirmPass = document.getElementById('btn-confirm-password');
+    if (btnConfirmPass) {
+        btnConfirmPass.onclick = async () => {
+            const newPass = document.getElementById('new-pass').value;
+            const confirmPass = document.getElementById('confirm-pass').value;
+            if (newPass.length < 6) { toast('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร'); return; }
+            if (newPass !== confirmPass) { toast('รหัสผ่านไม่ตรงกัน'); return; }
+            if (useFirebase && auth.currentUser) {
+                try {
+                    await auth.currentUser.updatePassword(newPass);
+                    toast('เปลี่ยนรหัสผ่านสำเร็จแล้ว!');
+                    document.getElementById('new-pass').value = '';
+                    document.getElementById('confirm-pass').value = '';
+                    go('profile');
+                } catch (error) {
+                    if (error.code === 'auth/requires-recent-login') toast('กรุณาออกจากระบบและเข้าสู่ระบบใหม่อีกครั้งเพื่อเปลี่ยนรหัส');
+                    else toast('ผิดพลาด: ' + error.message);
+                }
+            }
+        };
+    }
+
+    // Report button
     const btnReport = document.getElementById('btn-send-report');
     if (btnReport) btnReport.onclick = sendToDiscord;
-});
 
-// ====== Init ======
-// ====== Init ======
-// ถ้ามี Firebase และยังมี session อยู่ ให้ sync แล้วเข้าหน้า home
-// ====== Init (Check carefully) ======
-if (useFirebase) {
-    auth.onAuthStateChanged(async (u) => {
-        if (u) {
-            try {
-                const doc = await db.collection('users').doc(u.uid).get();
-                const name = (doc.exists && doc.data().name) ? doc.data().name : (u.email || 'user').split('@')[0];
-                LS.setUser({ name, uid: u.uid });
-            } catch (e) {
-                LS.setUser({ name: (u.email || 'user').split('@')[0], uid: u.uid });
+    // Check auth state
+    if (useFirebase) {
+        auth.onAuthStateChanged(async (u) => {
+            if (u) {
+                try {
+                    const doc = await db.collection('users').doc(u.uid).get();
+                    const name = (doc.exists && doc.data().name) ? doc.data().name : (u.email || 'user').split('@')[0];
+                    LS.setUser({ name, uid: u.uid });
+                } catch (e) {
+                    LS.setUser({ name: (u.email || 'user').split('@')[0], uid: u.uid });
+                }
+                await syncRecordsFromFirebase();
+                go('home');
+            } else if (!LS.user()) {
+                go('welcome');
+            } else { 
+                go('home');
             }
-            await syncRecordsFromFirebase();
-            go('home');
-        } else if (!LS.user()) {
-            go('welcome');
-        } else {
-            go('home');
-        }
-    });
-} else {
-    if (LS.user()) go('home'); else go('welcome');
-}
-// จบ Init
+        });
+    } else {
+        if (LS.user()) go('home'); else go('welcome');
+    }
+});
 </script>
 </body>
 </html>
